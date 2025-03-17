@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const connection = require("../db");
 require("dotenv").config();
 
-const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Login endpoint
 router.post("/login", async (req, res) => {

@@ -1,0 +1,179 @@
+.text-chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* Full height of the viewport */
+    width: 60%; /* Take up half of the screen */
+    min-width: 40%; /* Minimum width of 60% of a laptop screen */
+    max-width: 70%; /* Ensure it doesn't exceed half of the screen */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto; /* Center the chat container */
+  }
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 1; 
+}
+
+.profile-picture,
+.profile-picture-text {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; 
+  background-color: #ccc; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.profile-picture-text {
+  margin-top: 20px;
+  margin-right: 15px;
+}
+
+.user-icon {
+  font-size: 20px; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.header-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-info h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.header-info span {
+  font-size: 12px;
+  color: #666;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto; 
+  margin-top: 15px; 
+}
+
+.message {
+  display: flex;
+  align-items: flex-start; 
+  margin-bottom: 20px; 
+}
+
+.message.received {
+  justify-content: flex-start;
+}
+
+.message.sent {
+  justify-content: flex-end;
+}
+
+.message-content {
+  max-width: 70%;
+  display: flex;
+  flex-direction: column;
+}
+
+.message.received .message-content {
+  align-items: flex-start;
+}
+
+.message.sent .message-content {
+  align-items: flex-end;
+}
+
+.message-info {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.message.received .message-info {
+  justify-content: flex-start;
+}
+
+.message.sent .message-info {
+  justify-content: flex-end;
+}
+
+.message-sender {
+  font-weight: bold;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.message-time {
+  font-size: 12px;
+  color: #666;
+}
+
+.message-text {
+  margin: 0;
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  word-wrap: break-word;
+}
+
+/* Received message bubble */
+.message.received .message-text {
+  background-color: #f1f1f1; 
+  color: #000;
+  border-radius: 12px; 
+  position: relative;
+}
+
+/* Sent message bubble */
+.message.sent .message-text {
+  background-color: #007bff; 
+  color: #fff;
+  border-radius: 12px; 
+  position: relative;
+}
+
+
+.message.received .message-text::before {
+  content: "";
+  background-color: inherit; 
+  width: 15px;
+  height: 15px;
+  display: block;
+  position: absolute;
+  left: -4px;
+  top: 8px;
+  transform: rotate(45deg);
+  border-radius: 0 0 0 3px; 
+}
+
+
+.message.sent .message-text::after {
+  content: "";
+  background-color: inherit; 
+  width: 15px;
+  height: 15px;
+  display: block;
+  position: absolute;
+  right: -4px;
+  top: 8px; 
+  transform: rotate(45deg);
+  border-radius: 0 0 3px 0; 
+}

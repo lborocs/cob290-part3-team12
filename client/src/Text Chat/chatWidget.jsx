@@ -3,30 +3,39 @@ import './chatWidget.css';
 
 const chatWidget = (
     {
+        widgetID,
         iconFilePath,
         chatHeading,
         lastMessage,
         lastMessageTime,
         notioficationCount,
+        isActive,
+        handleClick
     }
 )=> {
 
-    function handleClick() {
-        console.log('Clicked');
-    }
+const date = lastMessageTime ? new Date(lastMessageTime) : new Date();
+const hours = date.getHours().toString().padStart(2, '0'); // Ensure 2-digit format
+const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure 2-digit format
+const formattedTime = `${hours}:${minutes}`;
+var icon = <img src={iconFilePath} alt="icon" />;
+
+if (iconFilePath == null) {
+    var initials = chatHeading.split(' ').map((n)=>n[0]).join('');
+    icon =<span className='iconInnitials'>{initials}</span>
+}
 
     return (
-        <div className='chatWidgetWrapper' onClick={handleClick}>
+        <div id = {widgetID}className={`chatWidgetWrapper ${isActive ? 'active' : ''}`} onClick={handleClick}>
             <div className='section iconCol'>
-                <div className ='imageMask'><img src ={iconFilePath} alt='icon'/></div>
-                {/* <div className ='imageMask'><img alt='icon'/></div> */}
+                <div className ='imageMask'>{icon}</div>
             </div>
             <div className ='section contentsCol'>
                 <h2>{chatHeading}</h2>
                 <p>{lastMessage}</p>
                 </div>
             <div className='section notificationCol'>
-                <p>{lastMessageTime}</p>
+                <p>{formattedTime}</p>
                 <div className='notificationCount'>{notioficationCount}</div>
             </div>
 

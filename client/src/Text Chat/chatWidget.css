@@ -5,9 +5,18 @@
     justify-content: space-between;
     padding:  10px;
     gap: 20px;
+    transition: ease-in-out 0.1s;
 
 }
 
+.active{
+    background-color: #FFF5D2;
+}
+
+.chatWidgetWrapper:hover{
+    cursor: pointer;
+    background-color: #eaeaea;
+}
 .section{
     text-align: left;
     width: 65%;
@@ -20,11 +29,11 @@
 
 .imageMask{
     border-radius: 50%;
-    width: 100%;
-    height: auto;
+    width: 70px;
+    height: 70px;
     max-width: 100px;
-    max-height: fit-content;
-    background-color: var(--background-grey);
+    max-height: 100px;
+    background: linear-gradient(to top right, #969696, #dddddd);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,6 +41,12 @@
 }
 img{
     width: 100%;
+}
+
+.iconInnitials{
+    font-size: 30px;
+    color: white;
+    font-weight: 700;
 }
 
 h2{
@@ -68,3 +83,4 @@ p{
     margin-left: auto;
 
 }
+

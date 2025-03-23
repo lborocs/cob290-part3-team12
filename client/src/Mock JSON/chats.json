@@ -1,34 +1,59 @@
 [
   {
-    "id": 1,
-    "iconFilePath": null,
+    "widgetID": 1,
+    "iconFilePath": "/Assets/michaelProfilePic.png",
     "chatHeading": "Michael Scott",
     "lastMessage": "I'm not superstitious, but I am a little stitious.",
     "lastMessageTime": "2025-03-23T09:30:00",
     "notioficationCount": 3
   },
   {
-    "id": 2,
-    "iconFilePath": null,
+    "widgetID": 2,
+    "iconFilePath": "/Assets/dwightProfilePic.jpg",
     "chatHeading": "Dwight Schrute",
     "lastMessage": "I am faster than 80% of all snakes.",
     "lastMessageTime": "2025-03-23T10:00:00",
     "notioficationCount": 1
   },
   {
-    "id": 3,
-    "iconFilePath": null,
+    "widgetID": 3,
+    "iconFilePath": "/Assets/jimProfilePic.jpg",
     "chatHeading": "Jim Halpert",
-    "lastMessage": "I’m not interested in having a conversation with you right now, Pam.",
+    "lastMessage": "Want to help me move Dwights desk into the bathroom",
     "lastMessageTime": "2025-03-23T11:15:00",
     "notioficationCount": 5
   },
   {
-    "id": 4,
-    "iconFilePath": null,
+    "widgetID": 4,
+    "iconFilePath": "/Assets/pamProfilePic.jpeg",
     "chatHeading": "Pam Beesly",
     "lastMessage": "I feel God in this Chili's tonight.",
     "lastMessageTime": "2025-03-23T12:05:00",
     "notioficationCount": 2
-  }
+  },
+  {
+    "widgetID": "5",
+    "iconFilePath": null,
+    "chatHeading": "Stanley Hudson",
+    "lastMessage": "Did I stutter?",
+    "lastMessageTime": "2023-03-25T08:00:00Z",
+    "notioficationCount": 2
+},
+{
+    "widgetID": "6",
+    "iconFilePath": null,
+    "chatHeading": "Kevin Malone",
+    "lastMessage": "Why waste time say lot word when few word do trick?",
+    "lastMessageTime": "2023-03-26T16:45:00Z",
+    "notioficationCount": 7
+},
+{
+    "widgetID": "7",
+    "iconFilePath": null,
+    "chatHeading": "Angela Martin",
+    "lastMessage": "Save Bandit!",
+    "lastMessageTime": "2023-03-27T10:00:00Z",
+    "notioficationCount": 4
+}
+  
 ]

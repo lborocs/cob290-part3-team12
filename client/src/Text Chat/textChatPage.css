@@ -1,0 +1,13 @@
+.pageWrapper{
+    display: flex;
+    margin: 10px
+
+}
+
+.leftHandMenu{
+    width:25%;
+}
+
+.rightHandMenu{
+    width: 75%;
+}   

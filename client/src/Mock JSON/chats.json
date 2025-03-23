@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "iconFilePath": null,
+    "chatHeading": "Michael Scott",
+    "lastMessage": "I'm not superstitious, but I am a little stitious.",
+    "lastMessageTime": "2025-03-23T09:30:00",
+    "notioficationCount": 3
+  },
+  {
+    "id": 2,
+    "iconFilePath": null,
+    "chatHeading": "Dwight Schrute",
+    "lastMessage": "I am faster than 80% of all snakes.",
+    "lastMessageTime": "2025-03-23T10:00:00",
+    "notioficationCount": 1
+  },
+  {
+    "id": 3,
+    "iconFilePath": null,
+    "chatHeading": "Jim Halpert",
+    "lastMessage": "I’m not interested in having a conversation with you right now, Pam.",
+    "lastMessageTime": "2025-03-23T11:15:00",
+    "notioficationCount": 5
+  },
+  {
+    "id": 4,
+    "iconFilePath": null,
+    "chatHeading": "Pam Beesly",
+    "lastMessage": "I feel God in this Chili's tonight.",
+    "lastMessageTime": "2025-03-23T12:05:00",
+    "notioficationCount": 2
+  }
+]

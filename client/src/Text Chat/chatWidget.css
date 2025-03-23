@@ -1,0 +1,86 @@
+.chatWidgetWrapper{
+    display: flex;
+    width: 350px;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding:  10px;
+    gap: 20px;
+    transition: ease-in-out 0.1s;
+
+}
+
+.active{
+    background-color: #FFF5D2;
+}
+
+.chatWidgetWrapper:hover{
+    cursor: pointer;
+    background-color: #eaeaea;
+}
+.section{
+    text-align: left;
+    width: 65%;
+}  
+
+.iconCol{
+    width: 25%;
+}
+
+
+.imageMask{
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    max-width: 100px;
+    max-height: 100px;
+    background: linear-gradient(to top right, #969696, #dddddd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+img{
+    width: 100%;
+}
+
+.iconInnitials{
+    font-size: 30px;
+    color: white;
+    font-weight: 700;
+}
+
+h2{
+    line-height: 0%;
+    margin: 10% 0;
+
+}
+p{
+    width: 100%;
+    line-height: 120%;
+    overflow: hidden;
+    font-weight: 200;
+    margin: 0;
+}
+
+.notificationCol{
+    color: var(--primary-yellow);
+    width: 15%;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    padding-top: 5%;   
+}
+
+
+.notificationCount{
+    background-color: var(--primary-yellow);
+    border-radius: 40%;
+    text-align: center;
+    padding: 4% 2%;
+    color: white;
+    font-weight: 600;
+    width: 30px;
+    margin-left: auto;
+
+}
+

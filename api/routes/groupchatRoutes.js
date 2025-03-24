@@ -84,10 +84,10 @@ output:
 how:
 - make new record in groupchats & membership table
 */
-router.get("/create-groupchat", authenticateToken, (req, res) => {
+router.post("/create-groupchat", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatName = req.name;
-  let admin_only_add = req.admin_only_add || 0;
+  let groupchatName = req.body.groupchat_name;
+  let admin_only_add = req.body.admin_only_add || 0;
   let currentTime = new Date();
 
   // Insert into groupchat table
@@ -144,10 +144,10 @@ how:
 - edit membership table
 */
 
-router.get("/edit-groupchat-name", authenticateToken, (req, res) => {
+router.put("/edit-groupchat-name", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatId = req.id;
-  let newName = req.new_name;
+  let groupchatId = req.body.groupchat_id;
+  let newName = req.body.new_name;
 
   // Insert into groupchat table
   let membershipLevelQuery = `
@@ -164,7 +164,7 @@ router.get("/edit-groupchat-name", authenticateToken, (req, res) => {
         return res.status(500).json({ error: error.message });
       }
       //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || result[0] != "admin") {
+      if (results.length === 0 || results[0] !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 
@@ -203,10 +203,10 @@ how:
 - edit membership table
 */
 
-router.get("/edit-groupchat-desc", authenticateToken, (req, res) => {
+router.put("/edit-groupchat-desc", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatId = req.id;
-  let newDesc = req.new_desc;
+  let groupchatId = req.body.groupchat_id;
+  let newDesc = req.body.new_desc;
 
   // Insert into groupchat table
   let membershipLevelQuery = `
@@ -223,7 +223,7 @@ router.get("/edit-groupchat-desc", authenticateToken, (req, res) => {
         return res.status(500).json({ error: error.message });
       }
       //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || result[0] != "admin") {
+      if (results.length === 0 || results[0] !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 
@@ -262,10 +262,10 @@ how:
 - edit membership table
 */
 
-router.get("/edit-groupchat-add-level", authenticateToken, (req, res) => {
+router.put("/edit-groupchat-add-level", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatId = req.id;
-  let addLevel = req.add_level;
+  let groupchatId = req.body.groupchat_id;
+  let addLevel = req.body.add_level;
 
   // Insert into groupchat table
   let membershipLevelQuery = `
@@ -282,7 +282,7 @@ router.get("/edit-groupchat-add-level", authenticateToken, (req, res) => {
         return res.status(500).json({ error: error.message });
       }
       //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || result[0] != "admin") {
+      if (results.length === 0 || results[0] !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 
@@ -321,10 +321,10 @@ how:
 - edit membership table
 */
 
-router.get("/edit-groupchat-icon", authenticateToken, (req, res) => {
+router.put("/edit-groupchat-icon", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatId = req.id;
-  let iconUrl = req.icon_url;
+  let groupchatId = req.body.groupchat_id;
+  let iconUrl = req.body.icon_url;
 
   // Insert into groupchat table
   let membershipLevelQuery = `
@@ -341,7 +341,7 @@ router.get("/edit-groupchat-icon", authenticateToken, (req, res) => {
         return res.status(500).json({ error: error.message });
       }
       //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || result[0] != "admin") {
+      if (results.length === 0 || results[0] !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 
@@ -379,9 +379,9 @@ how:
 - delete records from groupchat, on delete cascade it
 */
 
-router.get("/delete-groupchat", authenticateToken, (req, res) => {
+router.delete("/delete-groupchat", authenticateToken, (req, res) => {
   let email = req.user.email;
-  let groupchatId = req.id;
+  let groupchatId = req.body.groupchat_id;
 
   // Insert into groupchat table
   let membershipLevelQuery = `
@@ -398,7 +398,7 @@ router.get("/delete-groupchat", authenticateToken, (req, res) => {
         return res.status(500).json({ error: error.message });
       }
       //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || result[0] != "admin") {
+      if (results.length === 0 || results[0] !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 

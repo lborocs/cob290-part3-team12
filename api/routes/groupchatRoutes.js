@@ -184,7 +184,7 @@ how:
 - edit membership table
 */
 
-router.get("//edit-groupchat-add-level", authenticateToken, (req, res) => {
+router.get("/edit-groupchat-add-level", authenticateToken, (req, res) => {
   let email = req.user.email;
 
   res.json({ email: email });
@@ -204,7 +204,7 @@ how:
 - edit membership table
 */
 
-router.get("//edit-groupchat-icon", authenticateToken, (req, res) => {
+router.get("/edit-groupchat-icon", authenticateToken, (req, res) => {
   let email = req.user.email;
 
   res.json({ email: email });
@@ -223,7 +223,7 @@ how:
 - delete records from groupchat, on delete cascade it
 */
 
-router.get("//delete-groupchat", authenticateToken, (req, res) => {
+router.get("/delete-groupchat", authenticateToken, (req, res) => {
   let email = req.user.email;
 
   res.json({ email: email });

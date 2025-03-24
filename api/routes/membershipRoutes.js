@@ -27,10 +27,10 @@ how:
 - add record to membership table
 */
 router.post("/create-membership", authenticateToken, (req, res) => {
-  const email = req.user.email;
-  const recipientEmail = req.body.recipient_email;
-  const groupchatId = req.body.groupchat_id;
-  const currentTime = new Date();
+  let email = req.user.email;
+  let recipientEmail = req.body.recipient_email;
+  let groupchatId = req.body.groupchat_id;
+  let currentTime = new Date();
 
   // Check membership, recipient existence, and group settings in a single query
   const checkQuery = `
@@ -100,10 +100,10 @@ how:
 */
 
 router.put("/edit-membership-level", authenticateToken, (req, res) => {
-  const email = req.user.email;
-  const recipientEmail = req.body.recipient_email;
-  const groupchatId = req.body.groupchat_id;
-  const newLevel = req.body.new_level;
+  let email = req.user.email;
+  let recipientEmail = req.body.recipient_email;
+  let groupchatId = req.body.groupchat_id;
+  let newLevel = req.body.new_level;
 
   // Check membership, recipient existence, and group settings in a single query
   const checkQuery = `
@@ -170,9 +170,9 @@ how:
 */
 
 router.delete("/delete-membership", authenticateToken, (req, res) => {
-  const email = req.user.email;
-  const recipientEmail = req.body.recipient_email;
-  const groupchatId = req.body.groupchat_id;
+  let email = req.user.email;
+  let recipientEmail = req.body.recipient_email;
+  let groupchatId = req.body.groupchat_id;
 
   // Check membership, recipient existence, and group settings in a single query
   const checkQuery = `

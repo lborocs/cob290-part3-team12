@@ -146,8 +146,47 @@ how:
 
 router.get("/edit-groupchat-name", authenticateToken, (req, res) => {
   let email = req.user.email;
+  let groupchatId = req.id;
+  let newName = req.new_name;
 
-  res.json({ email: email });
+  // Insert into groupchat table
+  let membershipLevelQuery = `
+    SELECT permission
+    FROM Membership
+    WHERE email = ? AND groupchat_id = ?;
+  `;
+
+  connection.query(
+    membershipLevelQuery,
+    [email, groupchatId],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      //check that theres results and that the user is an admin of the gc
+      if (results.length === 0 || result[0] != "admin") {
+        return res.status(401).json({ error: "Invalid membership" });
+      }
+
+      // Insert into membership table
+      let editGroupchatNameQuery = `
+            UPDATE groupchat SET name = ? WHERE groupchatid = ?;
+        `;
+
+      connection.query(
+        editGroupchatNameQuery,
+        [newName, groupchatId],
+        (error) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          }
+          res.json({
+            message: "Groupchat edited successfully",
+          });
+        }
+      );
+    }
+  );
 });
 
 /*  edit groupchat desc
@@ -166,8 +205,47 @@ how:
 
 router.get("/edit-groupchat-desc", authenticateToken, (req, res) => {
   let email = req.user.email;
+  let groupchatId = req.id;
+  let newDesc = req.new_desc;
 
-  res.json({ email: email });
+  // Insert into groupchat table
+  let membershipLevelQuery = `
+    SELECT permission
+    FROM Membership
+    WHERE email = ? AND groupchat_id = ?;
+  `;
+
+  connection.query(
+    membershipLevelQuery,
+    [email, groupchatId],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      //check that theres results and that the user is an admin of the gc
+      if (results.length === 0 || result[0] != "admin") {
+        return res.status(401).json({ error: "Invalid membership" });
+      }
+
+      // Insert into membership table
+      let editGroupchatDescQuery = `
+            UPDATE groupchat SET description = ? WHERE groupchatid = ?;
+        `;
+
+      connection.query(
+        editGroupchatDescQuery,
+        [newDesc, groupchatId],
+        (error) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          }
+          res.json({
+            message: "Groupchat edited successfully",
+          });
+        }
+      );
+    }
+  );
 });
 
 /*  edit groupchat add level
@@ -186,8 +264,47 @@ how:
 
 router.get("/edit-groupchat-add-level", authenticateToken, (req, res) => {
   let email = req.user.email;
+  let groupchatId = req.id;
+  let addLevel = req.add_level;
 
-  res.json({ email: email });
+  // Insert into groupchat table
+  let membershipLevelQuery = `
+    SELECT permission
+    FROM Membership
+    WHERE email = ? AND groupchat_id = ?;
+  `;
+
+  connection.query(
+    membershipLevelQuery,
+    [email, groupchatId],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      //check that theres results and that the user is an admin of the gc
+      if (results.length === 0 || result[0] != "admin") {
+        return res.status(401).json({ error: "Invalid membership" });
+      }
+
+      // Insert into membership table
+      let editGroupchatAddLevelQuery = `
+            UPDATE groupchat SET admin_only_add = ? WHERE groupchatid = ?;
+        `;
+
+      connection.query(
+        editGroupchatAddLevelQuery,
+        [addLevel, groupchatId],
+        (error) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          }
+          res.json({
+            message: "Groupchat edited successfully",
+          });
+        }
+      );
+    }
+  );
 });
 
 /*  edit groupchat icon
@@ -206,8 +323,47 @@ how:
 
 router.get("/edit-groupchat-icon", authenticateToken, (req, res) => {
   let email = req.user.email;
+  let groupchatId = req.id;
+  let iconUrl = req.icon_url;
 
-  res.json({ email: email });
+  // Insert into groupchat table
+  let membershipLevelQuery = `
+    SELECT permission
+    FROM Membership
+    WHERE email = ? AND groupchat_id = ?;
+  `;
+
+  connection.query(
+    membershipLevelQuery,
+    [email, groupchatId],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      //check that theres results and that the user is an admin of the gc
+      if (results.length === 0 || result[0] != "admin") {
+        return res.status(401).json({ error: "Invalid membership" });
+      }
+
+      // Insert into membership table
+      let editGroupchatIconQuery = `
+            UPDATE groupchat SET icon_url = ? WHERE groupchatid = ?;
+        `;
+
+      connection.query(
+        editGroupchatIconQuery,
+        [iconUrl, groupchatId],
+        (error) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          }
+          res.json({
+            message: "Groupchat edited successfully",
+          });
+        }
+      );
+    }
+  );
 });
 
 /*  delete groupchat
@@ -225,8 +381,42 @@ how:
 
 router.get("/delete-groupchat", authenticateToken, (req, res) => {
   let email = req.user.email;
+  let groupchatId = req.id;
 
-  res.json({ email: email });
+  // Insert into groupchat table
+  let membershipLevelQuery = `
+    SELECT permission
+    FROM Membership
+    WHERE email = ? AND groupchat_id = ?;
+  `;
+
+  connection.query(
+    membershipLevelQuery,
+    [email, groupchatId],
+    (error, results) => {
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+      //check that theres results and that the user is an admin of the gc
+      if (results.length === 0 || result[0] != "admin") {
+        return res.status(401).json({ error: "Invalid membership" });
+      }
+
+      // Insert into membership table
+      let deleteGroupchatQuery = `
+            DELETE FROM Groupchat WHERE groupchat_id = ?;
+        `;
+
+      connection.query(deleteGroupchatQuery, [groupchatId], (error) => {
+        if (error) {
+          return res.status(500).json({ error: error.message });
+        }
+        res.json({
+          message: "Groupchat deleted successfully",
+        });
+      });
+    }
+  );
 });
 
 module.exports = router;

@@ -12,12 +12,16 @@ const authenticateToken = require("./authMiddleware");
 app.use(express.json());
 
 // Import Routes
-const routes = require("./routes");
+const routes = require("./routes/index");
 app.use("/api", routes);
 
 // Example of a protected route
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user });
+});
+
+app.get("/api", (req, res) => {
+  res.send("API is working");
 });
 
 // Start the server

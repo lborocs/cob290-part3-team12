@@ -42,7 +42,6 @@ router.get("/get-teams", authenticateToken, (req, res) => {
   });
 });
 
-
 /* get team leaders
 input:
 - token
@@ -57,12 +56,14 @@ how:
 */
 
 router.get("/get-teamleaders", authenticateToken, (req, res) => {
-    const teamLeaderQuery = `SELECT (team.teamid, team.team_leader) FROM team ORDER BY teamId`;
+  const teamLeaderQuery = `SELECT (team.teamid, team.team_leader) FROM team ORDER BY teamId`;
 
-    connection.query(teamLeaderQuery, (error, results) => {
-        if (error) {
-            return res.status(500).json({ error: error.message });
-        }
-        res.json(results);
-    });
+  connection.query(teamLeaderQuery, (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    res.json(results);
+  });
 });
+
+module.exports = router;

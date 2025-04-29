@@ -1,0 +1,136 @@
+.dashboard-container {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    background-color: #f8fafc;
+    min-height: 100vh;
+    box-sizing: border-box;
+    border: 1px solid #d1d5db; 
+    border-radius: 0.5rem;
+  }
+  
+  .dashboard-analytics {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-analytics-section {
+    flex: 1;
+  }
+  
+  
+  @media (min-width: 768px) {
+    .dashboard-analytics {
+      flex-direction: row;
+    }
+  }
+  
+  .dashboard-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0rem;
+    text-align: left;
+    padding-top: 1rem;
+  }
+  
+  .dashboard-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  
+  .dashboard-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem; 
+    margin-top: 3rem;
+    margin-right: 1rem;
+  }
+  
+  .dashboard-card {
+    background-color: #ffffff;
+    padding: 1.5rem; 
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    flex: 1 1 200px; 
+    min-width: 200px; 
+    text-align: left; 
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; 
+  }
+  
+  .dashboard-card-title {
+    font-size: 0.95rem; 
+    color: #6b7280;
+    margin: 0; 
+  }
+  
+  .dashboard-card-value {
+    font-size: 2.25rem; 
+    font-weight: bold;
+    margin: 0; 
+    line-height: 1.2; 
+  }
+  
+  .dashboard-card-trend {
+    font-size: 0.95rem;
+    margin: 0; 
+  }
+  
+  .dashboard-card-trend.positive {
+    color: #16a34a;
+  }
+  
+  .dashboard-card-trend.negative {
+    color: #dc2626;
+  }
+  
+  .dashboard-leader {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    margin-top: 5rem;
+    flex-wrap: wrap;
+    margin-left: 5rem;
+    text-align: left;
+    margin-right: 5rem;
+    border-top: 2px solid #e5e7eb; 
+    border-bottom: 2px solid #e5e7eb; 
+    padding: 1rem 0; 
+  }
+  
+  .dashboard-leader-avatar {
+    width: 90px;
+    height: 90px;
+    background-color: #e5e7eb;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  
+  .dashboard-leader-name {
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .dashboard-leader-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    background-color: #e2e8f0;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    margin: 0.5rem 0;
+  }
+  
+  .dashboard-leader-text {
+    font-size: 0.9rem;
+    color: #4b5563;
+  }
+
+  .dashboard-link-text {
+    text-align: left;
+    padding-top: 2.5rem;
+  }

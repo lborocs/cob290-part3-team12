@@ -1,0 +1,22 @@
+.header {
+    background-color: #007bff;
+    color: white;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-title {
+    font-size: 30px;
+    margin-bottom: 5px;
+    color: white;
+  }
+  
+  .header-subtitle {
+    font-size: 15px;
+    color: white;
+    opacity: 0.9;
+    margin: 0;
+    padding-bottom: 1rem;
+  }

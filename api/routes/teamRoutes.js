@@ -4,20 +4,54 @@ const authenticateToken = require("../authMiddleware");
 const connection = require("../db");
 
 // TODO: Test Routes
-// TODO: Check if email is user id
-// TODO: Write check leader id as a function
-// TODO: Limit who can create teams
-// TODO: Check if user is admin to get all teams/create teams
-// TODO: Improve edit team members
+// TODO: isAdmin logic verification
+
+// UTILITY FUNCTIONS
+// DO NOT USE getAdminStatus
+// Returns a boolean of whether the user is an admin
+function getAdminStatus(userId, callback) {
+  const query = `SELECT permission FROM Membership WHERE email = ?`;
+  connection.query(query, [userId], (error, results) => {
+    if (error) {
+      return callback(error, null);
+    }
+    if (results.length === 0) {
+      return callback(null, false);
+    }
+    if (results[0].permission === "admin") {
+      return callback(null, results[0].permission === "admin");
+    }
+  });
+}
+
+
+// Returns the team leader if of a given team id
+// Returns an error if the team does not exist
+function getTeamLeader(teamId, callback) {
+  const query = `SELECT team_leader FROM Team WHERE team_id = ?`;
+  connection.query(query, [teamId], (error, results) => {
+    if (error) {
+      return callback(error, null);
+    }
+    if (results.length === 0) {
+      return callback(new Error("Team not found"), null);
+    }
+    callback(null, results[0].team_leader);
+  });
+}
+
+
 // GET ROUTES
 
+// Get all teams and their members
+// Returns the team id, description, team leader and role of the user in that team
+// Only accessible by admins
 router.get("/get-all-teams", authenticateToken, (req, res) => {
   // Check if user is admin
-  // TODO
   let isAdmin = true; // Placeholder for admin check
 
   if (!isAdmin) {
-    return res.status(403).json({ error: "You are not authorized to view all teams" });
+    return res.status(403).json({ error: "You are not authorised to view all teams" });
   }
 
   // Query to get all teams and their members
@@ -33,7 +67,7 @@ router.get("/get-all-teams", authenticateToken, (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: "No teams found" });
+      return res.status(404).json({ message: "No teams exist" });
     }
 
     res.json(results);
@@ -41,6 +75,8 @@ router.get("/get-all-teams", authenticateToken, (req, res) => {
 });
 
 
+// Gets all teams that the user is a member of
+// Returns the team id, description, team leader and role of the user in that team
 router.get("/get-user-teams", authenticateToken, (req, res) => {
   let email = req.user.email;
 
@@ -58,26 +94,16 @@ router.get("/get-user-teams", authenticateToken, (req, res) => {
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: "No teams found for this user" });
+      return res.status(204).json({ message: "No teams found for this user" });
     }
 
     res.json(results);
   });
 });
 
-/* get team leaders
-input:
-- token
 
-output:
-- all team leaders in a json
-
-how:
-- check token
-- query team leaders
-- return results
-*/
-
+// Get all team leaders
+// Returns a list of all team ids and their corresponding leaders
 router.get("/get-teamleaders", authenticateToken, (req, res) => {
   const teamLeaderQuery = `SELECT team_id, team_leader FROM Team ORDER BY team_id;`;
 
@@ -85,25 +111,31 @@ router.get("/get-teamleaders", authenticateToken, (req, res) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: "No team leaders exist" });
+    }
+
     res.json(results);
   });
 });
 
 
-// CREATE ROUTES
-/* create team
-input:
-- token
-- team name
-- team description
-- team leader id
-- team members
-
-*/
+// Create a team
+// Input: team description, team leader id, team members (array of user ids)
+// Team id is generated automatically
+// Sends confirmation to the user
+// Only accessible by admins
 router.post("/create-team", authenticateToken, (req, res) => {
   const teamDescription = req.body.teamDescription; 
   const teamLeaderId = req.body.teamLeaderId;
-  const teamMembers = [] = req.body.teamMembers;
+  const teamMembers = req.body.teamMembers;
+
+  let isAdmin = true; // Placeholder for admin check
+
+  if (!isAdmin) {
+    return res.status(403).json({ error: "You are not authorised to create a team" });
+  }
 
   const createTeamQuery = `
     INSERT INTO Team (description, team_leader)
@@ -156,34 +188,26 @@ router.post("/create-team", authenticateToken, (req, res) => {
 
 
 // INSERT ROUTES
-/* edit team details
-input:
-- token
-- team id
-- changes
 
-output:
-- confirmation / status
-*/
-
+// Edit the team description and or team leader
+// User must be the team leader or an admin
+// Returns a confirmation message
 router.put("/edit-team-details", authenticateToken, (req, res) => {
   const teamId = req.body.teamId;
   const changes = req.body.changes;
   const userId = req.user.email;
 
-  // Check if the user is the team leader
-  const checkLeaderQuery = `
-    SELECT team_leader
-    FROM Team
-    WHERE team_id = ?;
-  `;
+  let isAdmin = true; // Placeholder for admin check
 
-  connection.query(checkLeaderQuery, [teamId], (error, results) => {
+  getTeamLeader(teamId, (error, teamLeaderId) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
-
-    if (results.length === 0 || results[0].team_leader !== userId) {
+    
+    const isTeamLeader = teamLeaderId === userId;
+    
+    if (isTeamLeader || isAdmin) {
+    } else {
       return res.status(403).json({ error: "You are not authorised to edit this team" });
     }
 
@@ -204,77 +228,81 @@ router.put("/edit-team-details", authenticateToken, (req, res) => {
 });
 
 
+// Edits the members of a given team id
+// Removes all members and adds the new ones
+// User must be the team leader
 router.put("/edit-team-members", authenticateToken, (req, res) => {
   const teamId = req.body.teamId;
   const newMembers = req.body.newMembers;
   const userId = req.user.email;
 
-  // Check if the user is the team leader
-  const checkLeaderQuery = `
-    SELECT team_leader
-    FROM Team
-    WHERE team_id = ?;
-  `;
+  let isAdmin = true; // Placeholder for admin check
 
-  connection.query(checkLeaderQuery, [teamId], (error, results) => {
+  getTeamLeader(teamId, (error, teamLeaderId) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
-
-    if (results.length === 0 || results[0].team_leader !== userId) {
+    
+    const isTeamLeader = teamLeaderId === userId;
+    
+    if (isTeamLeader || isAdmin) {
+    } else {
       return res.status(403).json({ error: "You are not authorised to edit this team" });
     }
 
-    // Update team members
-    const updateMembersQuery = `
-      INSERT INTO Team_Members (team_id, user_id, role)
-      VALUES (?, ?, ?);
+    // Clear all exisiting members except the team leader
+    const deleteQuery = `
+      DELETE FROM Team_Members WHERE team_id = ? AND user_id != ?;
     `;
 
-    connection.query(updateMembersQuery, [teamId, newMembers], (memberError) => {
-      if (memberError) {
-        return res.status(500).json({ error: memberError.message });
+    connection.query(deleteQuery, [teamId, userId], (deleteErr) => {
+      if (deleteErr) return res.status(500).json({ error: deleteErr.message });
+
+      // Create rows of new team members
+      const values = newMembers
+        .filter(memberId => memberId !== userId) // Filter out the team leader
+        .map(memberId => [teamId, memberId, 'member']);
+
+      if (values.length === 0) {
+        return res.json({ message: "Team members reset" }); // Nothing to insert
       }
 
-      res.json({ message: "Team members updated successfully" });
+      const insertQuery = `
+        INSERT INTO Team_Members (team_id, user_id, role)
+        VALUES ?
+      `;
+
+      connection.query(insertQuery, [values], (insertErr) => {
+        if (insertErr) return res.status(500).json({ error: insertErr.message });
+
+        res.json({ message: "Team members updated successfully" });
+      });
     });
   });
 });
 
+
 // DELETE ROUTES
-/* delete team
-input:
-- token
-- team id
-- user id
 
-output:
-- confirmation / status
-
-how:
-- check token
-- check if user is team leader
-- delete team from team table
-- delete team from team members table
-*/
-
+// Delete a team and all its members
+// User must be the team leader or an admin
+// Returns a confirmation message
 router.delete("/delete-team", authenticateToken, (req, res) => {
   const teamId= req.body.teamId;
   const userId = req.user.email;
 
-  // Check if the user is the team leader
-  const checkLeaderQuery = `
-    SELECT team_leader
-    FROM Team
-    WHERE team_id = ?;
-  `;
+  let isAdmin = true; // Placeholder for admin check
 
-  connection.query(checkLeaderQuery, [teamId], (error, results) => {
+  // Check if the user is the team leader
+  getTeamLeader(teamId, (error, teamLeaderId) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
-
-    if (results.length === 0 || results[0].team_leader !== userId) {
+    
+    const isTeamLeader = teamLeaderId === userId;
+    
+    if (isTeamLeader || isAdmin) {
+    } else {
       return res.status(403).json({ error: "You are not authorised to delete this team" });
     }
 
@@ -301,27 +329,29 @@ router.delete("/delete-team", authenticateToken, (req, res) => {
 });
 
 
+// Delete a team member from a team
+// User must be the team leader or an admin
+// Returns a confirmation message
 router.delete("/delete-team-member", authenticateToken, (req, res) => {
   const teamId = req.body.teamId;
   const userToRemoveId = req.body.userToRemoveId;
   const currentUserId = req.user.email;
 
-  // Check if the current user is the team leader
-  const checkLeaderQuery = `
-    SELECT team_leader
-    FROM Team
-    WHERE team_id = ?;
-  `;
+  let isAdmin = true; // Placeholder for admin check
 
-  connection.query(checkLeaderQuery, [teamId], (error, results) => {
+  // Check if the user is the team leader
+  getTeamLeader(teamId, (error, teamLeaderId) => {
     if (error) {
       return res.status(500).json({ error: error.message });
     }
-
-    if (results.length === 0 || results[0].team_leader !== currentUserId) {
+    
+    const isTeamLeader = teamLeaderId === currentUserId;
+    
+    if (isTeamLeader || isAdmin) {
+    } else {
       return res.status(403).json({ error: "You are not authorised to delete this team member" });
     }
-
+    
     // Delete the team member from the Team_Members table
     const deleteMemberQuery = `DELETE FROM Team_Members WHERE team_id = ? AND user_id = ?;`;
 

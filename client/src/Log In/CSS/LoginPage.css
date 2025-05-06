@@ -5,9 +5,10 @@
     margin: 0;
     display: grid;
     grid-template-columns: 0.35fr 0.65fr;
+    overflow: hidden;  
 }
 .pattern-wrapper{
-    background-image: url("../../../assets/backgroundPattern.png");
+    background-image: url("../../assets/backgroundPattern.png");
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;

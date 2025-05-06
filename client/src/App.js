@@ -4,13 +4,15 @@ import React from 'react';
 import ChatsColumn from './Text Chat/chatsColumn';
 import TextChatPage from './Text Chat/textChatPage';
 import Dashboard from './Data Analytics/dashboard';
+import LoginPage from './Log In/LoginPage';
 
 
 function App() {
   return (
     <div className="App">
-      <Dashboard />
+      {/* <Dashboard /> */}
       {/* <TextChatPage/>  */}
+      <LoginPage />
       
     </div>
   );

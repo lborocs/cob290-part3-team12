@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './chatWidget.css';
+import './CSS/chatWidget.css';
 
 const chatWidget = (
     {
@@ -15,8 +15,8 @@ const chatWidget = (
 )=> {
 
 const date = lastMessageTime ? new Date(lastMessageTime) : new Date();
-const hours = date.getHours().toString().padStart(2, '0'); // Ensure 2-digit format
-const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure 2-digit format
+const hours = date.getHours().toString().padStart(2, '0'); 
+const minutes = date.getMinutes().toString().padStart(2, '0'); 
 const formattedTime = `${hours}:${minutes}`;
 var icon = <img src={iconFilePath} alt="icon" />;
 
@@ -31,8 +31,8 @@ if (iconFilePath == null) {
                 <div className ='imageMask'>{icon}</div>
             </div>
             <div className ='section contentsCol'>
-                <h2>{chatHeading}</h2>
-                <p>{lastMessage}</p>
+                <h2 className='chatHeading'>{chatHeading}</h2>
+                <p className='lastMessage'>{lastMessage}</p>
                 </div>
             <div className='section notificationCol'>
                 <p>{formattedTime}</p>

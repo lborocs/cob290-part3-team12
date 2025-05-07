@@ -1,6 +1,6 @@
 import React from 'react';
 import InputField from './inputbox';
-import './messages.css'; 
+import './CSS/messages.css'; 
 
 const TextChat = () => {
 

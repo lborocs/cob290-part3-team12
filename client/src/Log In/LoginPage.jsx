@@ -12,7 +12,7 @@ const LoginPage = () => {
             <div className="hero">
                 <h1 className="heroHeader">We Make Tomorrow Happen <span className="focus">Today</span></h1>
                 <img src={scribbleImage} alt="Scribble" />
-                <p>- Make It All</p>
+                <p className="quoteTag">- Make It All</p>
             </div>
             <div className="loginFormWrapper"><LogInform /></div>
         </div>

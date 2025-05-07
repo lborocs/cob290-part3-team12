@@ -1,20 +1,26 @@
 import './App.css';
-import TextChat from './Text Chat/messages';
 import React from 'react';
-import ChatsColumn from './Text Chat/chatsColumn';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import LoginPage from './Log In/LoginPage';
 import TextChatPage from './Text Chat/textChatPage';
 import Dashboard from './Data Analytics/dashboard';
-import LoginPage from './Log In/LoginPage';
-
+import TabLayout from './Navigation/tabs';
 
 function App() {
   return (
-    <div className="App">
-      {/* <Dashboard /> */}
-      {/* <TextChatPage/>  */}
-      <LoginPage />
-      
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route element={<TabLayout />}>
+            <Route path="/textchat" element={<TextChatPage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<LoginPage />} />
+          </Route>
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -12,7 +12,6 @@ app.use(cors({
   credentials: true
 }));
 
-app.options('*', cors()); 
 //get the connection from the db config file
 const connection = require("./db");
 

@@ -13,14 +13,14 @@ app.use(express.json());
 
 // Import Routes
 const routes = require("./routes/index");
-app.use("/api", routes);
+app.use("/", routes);
 
 // Example of a protected route
-app.get("/api/protected", authenticateToken, (req, res) => {
+app.get("/protected", authenticateToken, (req, res) => {
   res.json({ message: "This is a protected route", user: req.user });
 });
 
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
   res.send("API is working");
 });
 

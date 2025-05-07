@@ -1,23 +1,25 @@
 import React from "react";
 import ChatsColumn from "./chatsColumn";
 import TextChat from './messages';
-import styles from './textChatPage.css';
+import ChatHeader from "./ChatHeader";
+import styles from './CSS/textChatPage.css';
 
 const TextChatPage = () => {
 
 
 
     return (
-        <div className="pageWrapper">
+        <div className="textChatPageWrapper">
             <div className="leftHandMenu">
+                <ChatHeader/>
                 <ChatsColumn/>
             </div>
-            <div className="chatContainer">
+            <div className="rightHandContainer">
             <TextChat/>
             </div>
         </div>
     );  
- 
+
 }
 
 

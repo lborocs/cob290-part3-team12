@@ -1,9 +1,11 @@
-// server.js
+
 require("dotenv").config();
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 //get the connection from the db config file
 const connection = require("./db");
 

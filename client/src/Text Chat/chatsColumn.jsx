@@ -3,20 +3,41 @@ import React, { use } from "react";
 import ChatWidget from "./chatWidget";
 import { useState, useEffect } from "react";
 import chatsData from "./../Mock JSON/chats.json";
-import "./chatsColumn.css";
+import "./CSS/chatsColumn.css";
 
 
 const ChatsColumn = (
 
 ) => {
-
     const[chats, setChats] = useState([]);
     const[activeChat, setActiveChat] = useState(null);
 
 
     useEffect(() => {
-        setChats(chatsData);
+        const jwt = localStorage.getItem("token");
+
+        console.log(localStorage.getItem("token"));
+        fetch("http://localhost:3000/get-groupchats", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${jwt}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(async (response) => {
+            const text = await response.text();
+            console.log("Raw response:", text);
+            return JSON.parse(text);
+          })
+        .then(data => {
+            setChats(data.groupchats);
+            console.log("Fetched group chats:", data);  
+        })
+        .catch(error => {
+            console.error("Error fetching group chats:", error);
+        });
     }, []);
+    
 
     const handleClick = (id) => {
         console.log('clicked', id);
@@ -27,14 +48,14 @@ const ChatsColumn = (
         <div className="chatsColumnWrapper">
             {chats.map((chat) => (
                 <ChatWidget
-                    widgetID = {chat.widgetID}
-                    iconFilePath={chat.iconFilePath}
-                    chatHeading={chat.chatHeading}
-                    lastMessage={chat.lastMessage}
-                    lastMessageTime={chat.lastMessageTime}
-                    notioficationCount={chat.notioficationCount}
-                    isActive={activeChat === chat.widgetID}
-                    handleClick={() => handleClick(chat.widgetID)}
+                widgetID = {chat.groupchat_id}
+                iconFilePath={chat.icon_url}
+                chatHeading={chat.name}
+                lastMessage={chat.description}
+                lastMessageTime={chat.last_active}
+                notioficationCount={chat.unread_messages_count}
+                isActive={activeChat === chat.groupchat_id}
+                handleClick={() => handleClick(chat.groupchat_id)}
 
                     />
             ))}

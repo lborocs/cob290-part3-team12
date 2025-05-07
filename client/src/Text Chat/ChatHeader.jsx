@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ChatHeader.css'; // Assuming you'll add CSS in a separate file
+import './CSS/ChatHeader.css'; // Assuming you'll add CSS in a separate file
 
 const ChatHeader = () => {
   const [activeButton, setActiveButton] = useState('All'); // State to track active button
@@ -13,13 +13,11 @@ const ChatHeader = () => {
 
   return (
     <div className="chat-header">
-      <div className="search-container">
         <input
           type="text"
           placeholder="Search chats..."
           className="search-input"
         />
-      </div>
       <div className="button-group">
         <button
           className={`chat-button ${activeButton === 'All' ? 'active' : ''}`}

@@ -12,7 +12,7 @@ const AbsoluteLoginForm = ({  }) => {
     const [password, setPassword] = useState("");
 
     const handleLogin = () => {
-        fetch("http://localhost:3000/login", {
+        fetch("http://35.234.158.197:3000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

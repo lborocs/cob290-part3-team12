@@ -19,7 +19,6 @@ const AbsoluteLoginForm = ({}) => {
       body: JSON.stringify({ email, password }),
     })
       .then((res) => {
-        console.log(res.text());
         return res.json();
       })
       .then((data) => {

@@ -16,11 +16,11 @@ const ChatsColumn = (
     useEffect(() => {
         const jwt = localStorage.getItem("token");
 
-        console.log(localStorage.getItem("token"));
+        console.log(`Token${localStorage.getItem("token")}`);
         fetch("http://35.234.158.197/api/get-groupchats", {
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${jwt}`,
+                "Authorization": `${jwt}`,
                 "Content-Type": "application/json"
             }
         })

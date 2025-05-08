@@ -10,6 +10,7 @@ const AbsoluteLoginForm = ({}) => {
   const [password, setPassword] = useState("");
 
   const handleLogin = () => {
+    console.log(JSON.stringify({ email, password }));
     fetch("http://35.234.158.197/api/login", {
       method: "POST",
       headers: {
@@ -17,7 +18,10 @@ const AbsoluteLoginForm = ({}) => {
       },
       body: JSON.stringify({ email, password }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        console.log(res.text());
+        return res.json();
+      })
       .then((data) => {
         if (data.token) {
           localStorage.setItem("token", data.token);

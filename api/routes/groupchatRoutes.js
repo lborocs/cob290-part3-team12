@@ -47,7 +47,7 @@ router.get("/get-groupchats", authenticateToken, (req, res) => {
         m.last_active,
         COALESCE(um.unread_count, 0) AS unread_messages_count
     FROM UserMembership m
-    JOIN groupchat g
+    JOIN Groupchat g
         ON g.groupchat_id = m.groupchat_id
     LEFT JOIN (
         SELECT 

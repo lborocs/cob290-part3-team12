@@ -11,7 +11,7 @@ const AbsoluteLoginForm = ({}) => {
 
   const handleLogin = () => {
     console.log(JSON.stringify({ email, password }));
-    fetch("http://35.234.158.197/api/login", {
+    fetch("http://35.197.209.41/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

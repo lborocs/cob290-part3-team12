@@ -17,7 +17,7 @@ const ChatsColumn = (
         const jwt = localStorage.getItem("token");
 
         console.log(`Token${localStorage.getItem("token")}`);
-        fetch("http://35.234.158.197/api/get-groupchats", {
+        fetch("http://35.197.209.41/api/get-groupchats", {
             method: "GET",
             headers: {
                 "Authorization": `${jwt}`,
@@ -46,7 +46,7 @@ const ChatsColumn = (
 
     return (
         <div className="chatsColumnWrapper">
-            {chats.map((chat) => (
+            {chats && chats.map((chat) => (
                 <ChatWidget
                 widgetID = {chat.groupchat_id}
                 iconFilePath={chat.icon_url}
@@ -58,7 +58,6 @@ const ChatsColumn = (
                 handleClick={() => handleClick(chat.groupchat_id)}
                     />
             ))}
-            
 
             </div>
 

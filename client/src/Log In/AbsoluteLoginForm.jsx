@@ -4,6 +4,7 @@ import Button from "./Button";
 import "./CSS/AbsoluteLoginForm.css";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import API_URL from "../config";
 const AbsoluteLoginForm = ({}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ const AbsoluteLoginForm = ({}) => {
 
   const handleLogin = () => {
     console.log(JSON.stringify({ email, password }));
-    fetch("http://35.197.209.41/api/login", {
+    fetch(`${API_URL}/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

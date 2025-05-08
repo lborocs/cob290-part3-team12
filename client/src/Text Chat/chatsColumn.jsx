@@ -50,7 +50,7 @@ const ChatsColumn = () => {
           <ChatWidget
             widgetID={chat.groupchat_id}
             iconFilePath={chat.icon_url}
-            chatHeading={chat.chatHeading}
+            chatHeading={chat.name}
             lastMessage={chat.description}
             lastMessageTime={chat.last_active}
             notioficationCount={chat.unread_messages_count}

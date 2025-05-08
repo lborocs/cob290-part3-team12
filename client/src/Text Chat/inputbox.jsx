@@ -1,8 +1,34 @@
 import React, { useState } from 'react';
 import { ArrowUp } from 'lucide-react'; 
+import API_URL from "../config";
 
-const InputField = () => {
+const InputField = ({ onMessageSent }) => {
   const [message, setMessage] = useState('');
+
+  const handleMessageSend = () => {
+    const token = localStorage.getItem("token");
+    const sender_email = localStorage.getItem("userEmail");
+
+    if (!message.trim()) return;
+
+    fetch(`${API_URL}/api/create-message`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        groupchat_id: 1,
+        message_contents: message,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMessage('');
+        if (onMessageSent) onMessageSent(); // Optionally trigger refresh
+      })
+      .catch((err) => console.error("Message send error:", err));
+  };
 
   return (
     <div style={styles.container}>
@@ -13,8 +39,11 @@ const InputField = () => {
           onChange={(e) => setMessage(e.target.value)}
           style={styles.input}
           placeholder="Type a message"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleMessageSend();
+          }}
         />
-        <button style={styles.button}>
+        <button style={styles.button} onClick={handleMessageSend}>
           <ArrowUp size={18} strokeWidth={3} color="white" />
         </button>
       </div>
@@ -30,14 +59,14 @@ const styles = {
     marginTop: '10px',
     position: 'sticky',
     zIndex: 1,
-    marginBottom: '20px'
+    marginBottom: '20px',
   },
   inputField: {
     display: 'flex',
     alignItems: 'center',
     border: '2px solid #000',
     borderRadius: '25px',
-    padding: '6px', 
+    padding: '6px',
     width: '80%',
     maxWidth: '600px',
     backgroundColor: 'white',
@@ -46,13 +75,13 @@ const styles = {
     flex: 1,
     border: 'none',
     outline: 'none',
-    padding: '8px', 
+    padding: '8px',
     fontSize: '16px',
     borderRadius: '20px',
   },
   button: {
-    width: '32px', 
-    height: '32px', 
+    width: '32px',
+    height: '32px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',

@@ -25,6 +25,7 @@ const AbsoluteLoginForm = ({}) => {
       .then((data) => {
         if (data.token) {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("userEmail", email)
           navigate("/textchat");
         } else {
           console.error("Login failed:", data.error);

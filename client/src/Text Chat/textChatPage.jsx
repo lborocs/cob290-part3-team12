@@ -6,8 +6,6 @@ import styles from './CSS/textChatPage.css';
 
 const TextChatPage = () => {
 
-
-
     return (
         <div className="textChatPageWrapper">
             <div className="leftHandMenu">

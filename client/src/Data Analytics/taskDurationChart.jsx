@@ -5,9 +5,8 @@ import API_URL from "../config";
 
 const COLORS = ["#0ea5e9", "#e879f9", "#a3e635"];
 
-const TaskDurationPieChart = ({ teamId }) => {
+const TaskDurationPieChart = ({ teamId, teamName }) => {
   const [data, setData] = useState([]);
-  const [teamName, setTeamName] = useState("");
 
   useEffect(() => {
     const fetchTaskData = async () => {
@@ -41,10 +40,6 @@ const TaskDurationPieChart = ({ teamId }) => {
           }));
 
           setData(chartData);
-          // Get team name from the first task's team_id
-          if (result.results.length > 0) {
-            setTeamName(`Team ${result.results[0].team_id}`);
-          }
         }
       } catch (error) {
         console.error("Error fetching task duration data:", error);

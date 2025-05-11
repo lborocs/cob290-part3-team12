@@ -85,41 +85,37 @@ how:
 - make new record in groupchats & membership table
 */
 router.post("/create-groupchat", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatName = req.body.groupchat_name;
-  let admin_only_add = req.body.admin_only_add || 0;
-  let currentTime = new Date();
+  const email = req.user.email;
+  const {
+    groupchat_name,
+    description = "",
+    admin_only_add = 0,
+    icon_url = null,
+  } = req.body;
+  const currentTime = new Date();
 
-  // Insert into groupchat table
   const createGroupchatQuery = `
-    INSERT INTO Groupchat (name, admin_only_add)
-    VALUES (?, ?);
+    INSERT INTO Groupchat (name, description, admin_only_add, icon_url)
+    VALUES (?, ?, ?, ?);
   `;
 
   connection.query(
     createGroupchatQuery,
-    [groupchatName, admin_only_add],
+    [groupchat_name, description, admin_only_add, icon_url],
     (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
+      if (error) return res.status(500).json({ error: error.message });
 
-      let groupchatId = results.insertId; // Get the generated groupchat_id
-
-      // Insert into membership table
+      const groupchatId = results.insertId;
       const addMembershipQuery = `
-            INSERT INTO Membership (email, groupchat_id, permission, last_active)
-            VALUES (?, ?, 'admin', ?);
-        `;
+        INSERT INTO Membership (email, groupchat_id, permission, last_active)
+        VALUES (?, ?, 'admin', ?);
+      `;
 
       connection.query(
         addMembershipQuery,
         [email, groupchatId, currentTime],
         (error) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-
+          if (error) return res.status(500).json({ error: error.message });
           res.json({
             message: "Groupchat created successfully",
             groupchat_id: groupchatId,
@@ -130,238 +126,59 @@ router.post("/create-groupchat", authenticateToken, (req, res) => {
   );
 });
 
-/*  edit groupchat name
-input:
-- token
-- changes
-- groupchat id
+router.put("/edit-groupchat", authenticateToken, (req, res) => {
+  const email = req.user.email;
+  const { groupchat_id, name, description, admin_only_add, icon_url } =
+    req.body;
 
-output:
-- status indication
-
-how:
-- check permission from membership table
-- edit membership table
-*/
-
-router.put("/edit-groupchat-name", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatId = req.body.groupchat_id;
-  let newName = req.body.new_name;
-
-  // Insert into groupchat table
-  const membershipLevelQuery = `
-    SELECT permission
-    FROM Membership
-    WHERE email = ? AND groupchat_id = ?;
+  // Check permission
+  const checkPermissionQuery = `
+    SELECT permission FROM Membership WHERE email = ? AND groupchat_id = ?;
   `;
 
   connection.query(
-    membershipLevelQuery,
-    [email, groupchatId],
+    checkPermissionQuery,
+    [email, groupchat_id],
     (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-      //check that theres results and that the user is an admin of the gc
+      if (error) return res.status(500).json({ error: error.message });
       if (results.length === 0 || results[0].permission !== "admin") {
         return res.status(401).json({ error: "Invalid membership" });
       }
 
-      // Insert into membership table
-      const editGroupchatNameQuery = `
-            UPDATE groupchat SET name = ? WHERE groupchatid = ?;
-        `;
+      // Prepare dynamic updates
+      let updates = [];
+      let values = [];
 
-      connection.query(
-        editGroupchatNameQuery,
-        [newName, groupchatId],
-        (error) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-          res.json({
-            message: "Groupchat edited successfully",
-          });
-        }
-      );
-    }
-  );
-});
-
-/*  edit groupchat desc
-input:
-- token
-- changes
-- groupchat id
-
-output:
-- status indication
-
-how:
-- check permission from membership table
-- edit membership table
-*/
-
-router.put("/edit-groupchat-desc", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatId = req.body.groupchat_id;
-  let newDesc = req.body.new_desc;
-
-  // Insert into groupchat table
-  const membershipLevelQuery = `
-    SELECT permission
-    FROM Membership
-    WHERE email = ? AND groupchat_id = ?;
-  `;
-
-  connection.query(
-    membershipLevelQuery,
-    [email, groupchatId],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
+      if (name) {
+        updates.push("name = ?");
+        values.push(name);
       }
-      //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || results[0].permission !== "admin") {
-        return res.status(401).json({ error: "Invalid membership" });
+      if (description) {
+        updates.push("description = ?");
+        values.push(description);
+      }
+      if (admin_only_add !== undefined) {
+        updates.push("admin_only_add = ?");
+        values.push(admin_only_add);
+      }
+      if (icon_url) {
+        updates.push("icon_url = ?");
+        values.push(icon_url);
       }
 
-      // Insert into membership table
-      const editGroupchatDescQuery = `
-            UPDATE groupchat SET description = ? WHERE groupchatid = ?;
-        `;
-
-      connection.query(
-        editGroupchatDescQuery,
-        [newDesc, groupchatId],
-        (error) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-          res.json({
-            message: "Groupchat edited successfully",
-          });
-        }
-      );
-    }
-  );
-});
-
-/*  edit groupchat add level
-input:
-- token
-- changes
-- groupchat id
-
-output:
-- status indication
-
-how:
-- check permission from membership table
-- edit membership table
-*/
-
-router.put("/edit-groupchat-add-level", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatId = req.body.groupchat_id;
-  let addLevel = req.body.add_level;
-
-  // Insert into groupchat table
-  const membershipLevelQuery = `
-    SELECT permission
-    FROM Membership
-    WHERE email = ? AND groupchat_id = ?;
-  `;
-
-  connection.query(
-    membershipLevelQuery,
-    [email, groupchatId],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-      //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || results[0].permission !== "admin") {
-        return res.status(401).json({ error: "Invalid membership" });
+      if (updates.length === 0) {
+        return res.status(400).json({ error: "No fields to update." });
       }
 
-      // Insert into membership table
-      const editGroupchatAddLevelQuery = `
-            UPDATE groupchat SET admin_only_add = ? WHERE groupchatid = ?;
-        `;
+      const updateQuery = `
+      UPDATE Groupchat SET ${updates.join(", ")} WHERE groupchat_id = ?;
+    `;
+      values.push(groupchat_id);
 
-      connection.query(
-        editGroupchatAddLevelQuery,
-        [addLevel, groupchatId],
-        (error) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-          res.json({
-            message: "Groupchat edited successfully",
-          });
-        }
-      );
-    }
-  );
-});
-
-/*  edit groupchat icon
-input:
-- token
-- new icon
-- groupchat id
-
-output:
-- status indication
-
-how:
-- check permission from membership table
-- edit membership table
-*/
-
-router.put("/edit-groupchat-icon", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatId = req.body.groupchat_id;
-  let iconUrl = req.body.icon_url;
-
-  // Insert into groupchat table
-  const membershipLevelQuery = `
-    SELECT permission
-    FROM Membership
-    WHERE email = ? AND groupchat_id = ?;
-  `;
-
-  connection.query(
-    membershipLevelQuery,
-    [email, groupchatId],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-      //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || results[0].permission !== "admin") {
-        return res.status(401).json({ error: "Invalid membership" });
-      }
-
-      // Insert into membership table
-      const editGroupchatIconQuery = `
-            UPDATE groupchat SET icon_url = ? WHERE groupchatid = ?;
-        `;
-
-      connection.query(
-        editGroupchatIconQuery,
-        [iconUrl, groupchatId],
-        (error) => {
-          if (error) {
-            return res.status(500).json({ error: error.message });
-          }
-          res.json({
-            message: "Groupchat edited successfully",
-          });
-        }
-      );
+      connection.query(updateQuery, values, (error) => {
+        if (error) return res.status(500).json({ error: error.message });
+        res.json({ message: "Groupchat updated successfully" });
+      });
     }
   );
 });

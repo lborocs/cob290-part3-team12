@@ -44,9 +44,8 @@ Input:
 Output:
 - JSON of all of the tasks for the team
 */
-router.get("/get-team-tasks", authenticateToken, (req, res) => {
-  let teamId = req.body.team_id;
-  //Check if req.user.email = team leader? or use team routes for this?
+router.get("/get-team-tasks/:teamId", authenticateToken, (req, res) => {
+  const teamId = req.params.teamId;
 
   const getTeamTasksQuery = `SELECT 
           task.task_id, 

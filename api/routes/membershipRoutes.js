@@ -110,7 +110,7 @@ router.put("/edit-membership-level", authenticateToken, (req, res) => {
           SELECT 
               m.permission AS user_permission, 
               (SELECT COUNT(*) FROM Membership WHERE email = ? AND groupchat_id = ?) AS recipient_exists
-          FROM Membership
+          FROM Membership m
           WHERE email = ? AND groupchat_id = ?;
       `;
 
@@ -179,7 +179,7 @@ router.delete("/delete-membership", authenticateToken, (req, res) => {
             SELECT 
                 m.permission AS user_permission, 
                 (SELECT COUNT(*) FROM Membership WHERE email = ? AND groupchat_id = ?) AS recipient_exists
-            FROM Membership
+            FROM Membership m
             WHERE email = ? AND groupchat_id = ?;
         `;
 

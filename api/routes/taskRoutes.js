@@ -52,7 +52,7 @@ router.get("/get-team-tasks/:teamId", authenticateToken, (req, res) => {
           task.description, 
           task.manhours,
           task.completed,
-          task.duedate,
+          task.due_date,
           task.user_id
            
           FROM Tasks task

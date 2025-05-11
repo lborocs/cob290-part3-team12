@@ -379,44 +379,48 @@ how:
 - delete records from groupchat, on delete cascade it
 */
 
-router.delete("/delete-groupchat", authenticateToken, (req, res) => {
-  let email = req.user.email;
-  let groupchatId = req.body.groupchat_id;
+router.delete(
+  "/delete-groupchat/:groupchat_id",
+  authenticateToken,
+  (req, res) => {
+    let email = req.user.email;
+    let groupchatId = req.params.groupchat_id;
 
-  // Insert into groupchat table
-  const membershipLevelQuery = `
+    // Insert into groupchat table
+    const membershipLevelQuery = `
     SELECT permission
     FROM Membership
     WHERE email = ? AND groupchat_id = ?;
   `;
 
-  connection.query(
-    membershipLevelQuery,
-    [email, groupchatId],
-    (error, results) => {
-      if (error) {
-        return res.status(500).json({ error: error.message });
-      }
-      //check that theres results and that the user is an admin of the gc
-      if (results.length === 0 || results[0].permission !== "admin") {
-        return res.status(401).json({ error: "Invalid membership" });
-      }
-
-      // Insert into membership table
-      const deleteGroupchatQuery = `
-            DELETE FROM Groupchat WHERE groupchat_id = ?;
-        `;
-
-      connection.query(deleteGroupchatQuery, [groupchatId], (error) => {
+    connection.query(
+      membershipLevelQuery,
+      [email, groupchatId],
+      (error, results) => {
         if (error) {
           return res.status(500).json({ error: error.message });
         }
-        res.json({
-          message: "Groupchat deleted successfully",
+        //check that theres results and that the user is an admin of the gc
+        if (results.length === 0 || results[0].permission !== "admin") {
+          return res.status(401).json({ error: "Invalid membership" });
+        }
+
+        // Insert into membership table
+        const deleteGroupchatQuery = `
+            DELETE FROM Groupchat WHERE groupchat_id = ?;
+        `;
+
+        connection.query(deleteGroupchatQuery, [groupchatId], (error) => {
+          if (error) {
+            return res.status(500).json({ error: error.message });
+          }
+          res.json({
+            message: "Groupchat deleted successfully",
+          });
         });
-      });
-    }
-  );
-});
+      }
+    );
+  }
+);
 
 module.exports = router;

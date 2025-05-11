@@ -39,7 +39,7 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
   const handleAddUser = async (userEmail) => {
     const jwt = localStorage.getItem("token");
     try {
-      const response = await fetch(`${API_URL}/api/add-user-to-groupchat`, {
+      const response = await fetch(`${API_URL}/api/create-membership`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,12 +47,11 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
         },
         body: JSON.stringify({
           groupchat_id: groupchatId,
-          email: userEmail,
+          recipient_email: userEmail,
         }),
       });
 
       if (response.ok) {
-        // Update the user's membership status in the local state
         setUsers(
           users.map((user) =>
             user.email === userEmail
@@ -69,6 +68,69 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
     }
   };
 
+  const handleUpdatePermission = async (userEmail, newLevel) => {
+    const jwt = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/edit-membership-level`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+        body: JSON.stringify({
+          groupchat_id: groupchatId,
+          recipient_email: userEmail,
+          new_level: newLevel,
+        }),
+      });
+
+      if (response.ok) {
+        setUsers(
+          users.map((user) =>
+            user.email === userEmail ? { ...user, permission: newLevel } : user
+          )
+        );
+      } else {
+        const data = await response.json();
+        setError(data.error || "Failed to update user permission");
+      }
+    } catch (error) {
+      setError("Error updating user permission");
+    }
+  };
+
+  const handleRemoveUser = async (userEmail) => {
+    const jwt = localStorage.getItem("token");
+    try {
+      const response = await fetch(`${API_URL}/api/delete-membership`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        },
+        body: JSON.stringify({
+          groupchat_id: groupchatId,
+          recipient_email: userEmail,
+        }),
+      });
+
+      if (response.ok) {
+        setUsers(
+          users.map((user) =>
+            user.email === userEmail
+              ? { ...user, is_member: false, permission: null }
+              : user
+          )
+        );
+      } else {
+        const data = await response.json();
+        setError(data.error || "Failed to remove user");
+      }
+    } catch (error) {
+      setError("Error removing user");
+    }
+  };
+
   const filteredUsers = users.filter((user) => {
     const fullName = `${user.first_name} ${user.last_name}`.toLowerCase();
     const email = user.email.toLowerCase();
@@ -81,7 +143,7 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
   return (
     <div className="popup-overlay">
       <div className="popup-content">
-        <h2>Add Users to Group Chat</h2>
+        <h2>Manage Group Members</h2>
         <div className="search-container">
           <input
             type="text"
@@ -104,18 +166,47 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
                   </span>
                   <span className="user-email">{user.email}</span>
                 </div>
-                {user.is_member ? (
-                  <span className="member-badge">
-                    {user.permission === "admin" ? "Admin" : "Member"}
-                  </span>
-                ) : (
-                  <button
-                    className="add-user-button"
-                    onClick={() => handleAddUser(user.email)}
-                  >
-                    Add
-                  </button>
-                )}
+                <div className="user-actions">
+                  {user.is_member ? (
+                    <>
+                      {user.permission === "admin" ? (
+                        <button
+                          className="action-button demote"
+                          onClick={() =>
+                            handleUpdatePermission(user.email, "member")
+                          }
+                          title="Demote to Member"
+                        >
+                          Demote
+                        </button>
+                      ) : (
+                        <button
+                          className="action-button promote"
+                          onClick={() =>
+                            handleUpdatePermission(user.email, "admin")
+                          }
+                          title="Promote to Admin"
+                        >
+                          Promote
+                        </button>
+                      )}
+                      <button
+                        className="action-button remove"
+                        onClick={() => handleRemoveUser(user.email)}
+                        title="Remove from Group"
+                      >
+                        Remove
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="add-user-button"
+                      onClick={() => handleAddUser(user.email)}
+                    >
+                      Add
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

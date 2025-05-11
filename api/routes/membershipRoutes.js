@@ -139,7 +139,7 @@ router.put("/edit-membership-level", authenticateToken, (req, res) => {
       }
 
       // Add recipient to membership table
-      const editMembershipQuery = `UPDATE membership SET permission = ? WHERE email = ? AND groupchat_id = ?`;
+      const editMembershipQuery = `UPDATE Membership SET permission = ? WHERE email = ? AND groupchat_id = ?`;
       connection.query(
         editMembershipQuery,
         [newLevel, recipientEmail, groupchatId],

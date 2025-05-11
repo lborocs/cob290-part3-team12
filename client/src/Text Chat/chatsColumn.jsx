@@ -5,10 +5,12 @@ import { useState, useEffect } from "react";
 import chatsData from "./../Mock JSON/chats.json";
 import "./CSS/chatsColumn.css";
 import API_URL from "../config";
+import EditGroupChatPopup from "./EditGroupChatPopup";
 
 const ChatsColumn = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
+  const [editingChat, setEditingChat] = useState(null);
   // useEffect(() => {
   //     setChats(chatsData);
   // }, []);
@@ -44,9 +46,21 @@ const ChatsColumn = ({ onChatSelect }) => {
     onChatSelect(id);
   };
 
-  const handleEdit = async (chatId) => {
-    // TODO: Implement edit functionality
-    console.log("Edit chat:", chatId);
+  const handleEdit = (chatId) => {
+    const chatToEdit = chats.find((chat) => chat.groupchat_id === chatId);
+    if (chatToEdit) {
+      setEditingChat(chatToEdit);
+    }
+  };
+
+  const handleGroupChatUpdated = (updatedData) => {
+    setChats(
+      chats.map((chat) =>
+        chat.groupchat_id === updatedData.groupchat_id
+          ? { ...chat, ...updatedData }
+          : chat
+      )
+    );
   };
 
   const handleDelete = async (chatId) => {
@@ -64,14 +78,14 @@ const ChatsColumn = ({ onChatSelect }) => {
       );
 
       if (response.ok) {
-        // Remove the deleted chat from the list
         setChats(chats.filter((chat) => chat.groupchat_id !== chatId));
         if (activeChat === chatId) {
           setActiveChat(null);
           onChatSelect(null);
         }
       } else {
-        console.error("Failed to delete group chat");
+        const errorData = await response.json();
+        console.error("Failed to delete group chat:", errorData);
       }
     } catch (error) {
       console.error("Error deleting group chat:", error);
@@ -97,6 +111,13 @@ const ChatsColumn = ({ onChatSelect }) => {
             onDelete={handleDelete}
           />
         ))}
+      <EditGroupChatPopup
+        isOpen={!!editingChat}
+        onClose={() => setEditingChat(null)}
+        onGroupChatUpdated={handleGroupChatUpdated}
+        groupchatId={editingChat?.groupchat_id}
+        initialData={editingChat}
+      />
     </div>
   );
 };

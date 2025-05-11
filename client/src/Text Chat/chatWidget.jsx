@@ -16,6 +16,8 @@ const ChatWidget = ({
   onEdit,
   onDelete,
 }) => {
+  const [showActions, setShowActions] = useState(false);
+
   const date = lastMessageTime ? new Date(lastMessageTime) : new Date();
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
@@ -46,6 +48,8 @@ const ChatWidget = ({
       id={widgetID}
       className={`chatWidgetWrapper ${isActive ? "active" : ""}`}
       onClick={handleClick}
+      onMouseEnter={() => setShowActions(true)}
+      onMouseLeave={() => setShowActions(false)}
     >
       <div className="section iconCol">
         <div className="imageMask">{icon}</div>
@@ -58,21 +62,21 @@ const ChatWidget = ({
         <p>{formattedTime}</p>
         <div className="notificationCount">{notioficationCount}</div>
       </div>
-      {isAdmin && (
+      {isAdmin && showActions && (
         <div className="action-buttons">
           <button
             className="action-button edit"
             onClick={handleEditClick}
             title="Edit Group Chat"
           >
-            <Edit2 size={20} />
+            <Edit2 size={16} />
           </button>
           <button
             className="action-button delete"
             onClick={handleDeleteClick}
             title="Delete Group Chat"
           >
-            <Trash2 size={20} />
+            <Trash2 size={16} />
           </button>
         </div>
       )}

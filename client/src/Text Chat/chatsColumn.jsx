@@ -1,19 +1,16 @@
 import React, { use } from "react";
-// import "./chatsColumn.css";
 import ChatWidget from "./chatWidget";
 import { useState, useEffect } from "react";
-import chatsData from "./../Mock JSON/chats.json";
 import "./CSS/chatsColumn.css";
 import API_URL from "../config";
 import EditGroupChatPopup from "./EditGroupChatPopup";
+import AddUserPopup from "./AddUserPopup";
 
 const ChatsColumn = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   const [editingChat, setEditingChat] = useState(null);
-  // useEffect(() => {
-  //     setChats(chatsData);
-  // }, []);
+  const [addingUserToChat, setAddingUserToChat] = useState(null);
 
   useEffect(() => {
     const jwt = localStorage.getItem("token");
@@ -51,6 +48,10 @@ const ChatsColumn = ({ onChatSelect }) => {
     if (chatToEdit) {
       setEditingChat(chatToEdit);
     }
+  };
+
+  const handleAddUser = (chatId) => {
+    setAddingUserToChat(chatId);
   };
 
   const handleGroupChatUpdated = (updatedData) => {
@@ -109,6 +110,7 @@ const ChatsColumn = ({ onChatSelect }) => {
             permissions={chat.permission}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onAddUser={handleAddUser}
           />
         ))}
       <EditGroupChatPopup
@@ -117,6 +119,11 @@ const ChatsColumn = ({ onChatSelect }) => {
         onGroupChatUpdated={handleGroupChatUpdated}
         groupchatId={editingChat?.groupchat_id}
         initialData={editingChat}
+      />
+      <AddUserPopup
+        isOpen={!!addingUserToChat}
+        onClose={() => setAddingUserToChat(null)}
+        groupchatId={addingUserToChat}
       />
     </div>
   );

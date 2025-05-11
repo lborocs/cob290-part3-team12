@@ -19,12 +19,12 @@ router.get("/get-user-tasks", authenticateToken, (req, res) => {
           task.description, 
           task.manhours,
           task.completed,
-          task.duedate,
+          task.due_date,
           task.team_id
            
           FROM Tasks task
           WHERE task.user_id = ?
-          ORDER BY task.duedate DESC;`;
+          ORDER BY task.due_date DESC;`;
   connection.query(getUserTasksQuery, [email], (error, results) => {
     if (error) {
       return res.status(500).json({ error: error.message });
@@ -57,7 +57,7 @@ router.get("/get-team-tasks/:teamId", authenticateToken, (req, res) => {
            
           FROM Tasks task
           WHERE task.team_id = ?
-          ORDER BY task.duedate DESC;`;
+          ORDER BY task.due_date DESC;`;
   connection.query(getTeamTasksQuery, [teamId], (error, results) => {
     if (error) {
       return res.status(500).json({ error: error.message });
@@ -87,11 +87,11 @@ router.get("/get-user-tasks-for-team", authenticateToken, (req, res) => {
           task.description, 
           task.manhours,
           task.completed,
-          task.duedate,
+          task.due_date,
            
           FROM Tasks task
           WHERE task.user_id = ? AND task.team_id = ? 
-          ORDER BY task.duedate DESC;`;
+          ORDER BY task.due_date DESC;`;
   connection.query(
     getUserTasksForTeamQuery,
     [email, teamId],

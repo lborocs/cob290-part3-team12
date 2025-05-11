@@ -39,7 +39,7 @@ router.post("/create-membership", authenticateToken, (req, res) => {
             g.admin_only_add,
             (SELECT COUNT(*) FROM Membership WHERE email = ? AND groupchat_id = ?) AS recipient_exists
         FROM Membership m
-        JOIN Groupchat g ON g.id = ?
+        JOIN Groupchat g ON g.groupchat_id = ?
         WHERE m.email = ? AND m.groupchat_id = ?;
     `;
 

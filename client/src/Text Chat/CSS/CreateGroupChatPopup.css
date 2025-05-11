@@ -70,6 +70,52 @@
   color: #1976d2;
 }
 
+.user-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  transform: scale(1.05);
+}
+
+.action-button.promote {
+  background-color: #2196f3;
+  color: white;
+}
+
+.action-button.promote:hover {
+  background-color: #1976d2;
+}
+
+.action-button.demote {
+  background-color: #ff9800;
+  color: white;
+}
+
+.action-button.demote:hover {
+  background-color: #f57c00;
+}
+
+.action-button.remove {
+  background-color: #f44336;
+  color: white;
+}
+
+.action-button.remove:hover {
+  background-color: #d32f2f;
+}
+
 .add-user-button {
   padding: 6px 12px;
   background-color: #4caf50;
@@ -78,10 +124,12 @@
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s;
+  font-size: 12px;
 }
 
 .add-user-button:hover {
   background-color: #388e3c;
+  transform: scale(1.05);
 }
 
 .error-message {

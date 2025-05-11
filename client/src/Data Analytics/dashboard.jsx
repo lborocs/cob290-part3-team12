@@ -8,6 +8,7 @@ import API_URL from "../config";
 const Dashboard = () => {
   const [selectedTeam, setSelectedTeam] = useState(null);
   const [teams, setTeams] = useState([]);
+  const [selectedTeamDescription, setSelectedTeamDescription] = useState("");
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -26,6 +27,7 @@ const Dashboard = () => {
             setTeams(data);
             if (data.length > 0) {
               setSelectedTeam(data[0].team_id);
+              setSelectedTeamDescription(data[0].description);
             }
           }
         } catch (error) {
@@ -36,6 +38,15 @@ const Dashboard = () => {
 
     fetchTeams();
   }, []);
+
+  const handleTeamChange = (e) => {
+    const teamId = e.target.value;
+    setSelectedTeam(teamId);
+    const selectedTeamData = teams.find((team) => team.team_id === teamId);
+    setSelectedTeamDescription(
+      selectedTeamData ? selectedTeamData.description : ""
+    );
+  };
 
   return (
     <div className="dashboard-container">
@@ -52,7 +63,7 @@ const Dashboard = () => {
           <select
             className="team-select"
             value={selectedTeam || ""}
-            onChange={(e) => setSelectedTeam(e.target.value)}
+            onChange={handleTeamChange}
           >
             {teams.map((team) => (
               <option key={team.team_id} value={team.team_id}>
@@ -86,13 +97,18 @@ const Dashboard = () => {
         <div className="dashboard-leader-avatar"></div>
         <div>
           <h2 className="dashboard-leader-name">Team Leader</h2>
-          <span className="dashboard-leader-tag">Selected Team</span>
+          <span className="dashboard-leader-tag">
+            {selectedTeamDescription}
+          </span>
           <p className="dashboard-leader-text">Lead your team to success</p>
         </div>
       </div>
 
       {/* Pie Chart Section */}
-      <TaskDurationPieChart teamId={selectedTeam} />
+      <TaskDurationPieChart
+        teamId={selectedTeam}
+        teamName={selectedTeamDescription}
+      />
     </div>
   );
 };

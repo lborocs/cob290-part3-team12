@@ -23,7 +23,7 @@ const ChatWidget = ({
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formattedTime = `${hours}:${minutes}`;
   var icon = <img src={iconFilePath} alt="icon" />;
-  var isAdmin = permissions == "standard" ? false : true;
+  var isAdmin = permissions === "standard" ? false : true;
 
   if (iconFilePath == null) {
     var initials = chatHeading

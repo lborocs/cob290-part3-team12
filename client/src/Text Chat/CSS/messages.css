@@ -1,16 +1,15 @@
 .text-chat-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Full height of the viewport */
-    width: 100%; /* Take up half of the screen */
-    min-width: 40%; /* Minimum width of 60% of a laptop screen */
-    /* max-width: 70%; Ensure it doesn't exceed half of the screen */
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    margin: 0; /* Center the chat container */
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  min-width: 40%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  margin: 0;
+}
 
 .chat-header {
   display: flex;
@@ -20,15 +19,15 @@
   border-bottom: 1px solid #ccc;
   position: sticky;
   top: 0;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .profile-picture,
 .profile-picture-text {
   width: 40px;
   height: 40px;
-  border-radius: 50%; 
-  background-color: #ccc; 
+  border-radius: 50%;
+  background-color: #ccc;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -41,7 +40,7 @@
 }
 
 .user-icon {
-  font-size: 20px; 
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,14 +66,16 @@
 .chat-messages {
   flex: 1;
   padding: 10px;
-  overflow-y: auto; 
-  margin-top: 15px; 
+  overflow-y: auto;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  max-height: calc(100vh - 180px); /* Account for header and input box */
 }
 
 .message {
   display: flex;
-  align-items: flex-start; 
-  margin-bottom: 20px; 
+  align-items: flex-start;
+  margin-bottom: 20px;
 }
 
 .message.received {
@@ -122,6 +123,102 @@
 .message-time {
   font-size: 12px;
   color: #666;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edited-indicator {
+  display: inline-flex;
+  align-items: center;
+  color: #666;
+  margin-left: 4px;
+}
+
+.message-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  margin-left: 8px;
+}
+
+.message:hover .message-actions {
+  opacity: 1;
+}
+
+.message-action-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: #666;
+}
+
+.message-action-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.message-action-button.edit {
+  color: #2196f3;
+}
+
+.message-action-button.delete {
+  color: #f44336;
+}
+
+.edit-message-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.edit-message-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.save-edit-button,
+.cancel-edit-button {
+  padding: 4px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.save-edit-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-edit-button:hover {
+  background-color: #388e3c;
+}
+
+.cancel-edit-button {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.cancel-edit-button:hover {
+  background-color: #e0e0e0;
 }
 
 .message-text {
@@ -136,24 +233,23 @@
 
 /* Received message bubble */
 .message.received .message-text {
-  background-color: #f1f1f1; 
+  background-color: #f1f1f1;
   color: #000;
-  border-radius: 12px; 
+  border-radius: 12px;
   position: relative;
 }
 
 /* Sent message bubble */
 .message.sent .message-text {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: #fff;
-  border-radius: 12px; 
+  border-radius: 12px;
   position: relative;
 }
 
-
 .message.received .message-text::before {
   content: "";
-  background-color: inherit; 
+  background-color: inherit;
   width: 15px;
   height: 15px;
   display: block;
@@ -161,19 +257,18 @@
   left: -4px;
   top: 8px;
   transform: rotate(45deg);
-  border-radius: 0 0 0 3px; 
+  border-radius: 0 0 0 3px;
 }
-
 
 .message.sent .message-text::after {
   content: "";
-  background-color: inherit; 
+  background-color: inherit;
   width: 15px;
   height: 15px;
   display: block;
   position: absolute;
   right: -4px;
-  top: 8px; 
+  top: 8px;
   transform: rotate(45deg);
-  border-radius: 0 0 3px 0; 
+  border-radius: 0 0 3px 0;
 }

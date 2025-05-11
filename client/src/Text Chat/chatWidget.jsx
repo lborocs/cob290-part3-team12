@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./CSS/chatWidget.css";
-import { Edit2, Trash2 } from "lucide-react";
+import { Edit2, Trash2, UserPlus } from "lucide-react";
 
 const ChatWidget = ({
   widgetID,
@@ -9,12 +9,12 @@ const ChatWidget = ({
   lastMessage,
   lastMessageTime,
   notioficationCount,
-  permissions,
   handleClick,
   isActive,
-  isAdmin,
+  permissions,
   onEdit,
   onDelete,
+  onAddUser,
 }) => {
   const [showActions, setShowActions] = useState(false);
 
@@ -43,6 +43,11 @@ const ChatWidget = ({
     onDelete(widgetID);
   };
 
+  const handleAddUserClick = (e) => {
+    e.stopPropagation();
+    onAddUser(widgetID);
+  };
+
   return (
     <div
       id={widgetID}
@@ -62,22 +67,33 @@ const ChatWidget = ({
         <p>{formattedTime}</p>
         <div className="notificationCount">{notioficationCount}</div>
       </div>
-      {isAdmin && showActions && (
+      {showActions && (
         <div className="action-buttons">
           <button
-            className="action-button edit"
-            onClick={handleEditClick}
-            title="Edit Group Chat"
+            className="action-button add-user"
+            onClick={handleAddUserClick}
+            title="Add User"
           >
-            <Edit2 size={16} />
+            <UserPlus size={16} />
           </button>
-          <button
-            className="action-button delete"
-            onClick={handleDeleteClick}
-            title="Delete Group Chat"
-          >
-            <Trash2 size={16} />
-          </button>
+          {isAdmin && (
+            <>
+              <button
+                className="action-button edit"
+                onClick={handleEditClick}
+                title="Edit Group Chat"
+              >
+                <Edit2 size={16} />
+              </button>
+              <button
+                className="action-button delete"
+                onClick={handleDeleteClick}
+                title="Delete Group Chat"
+              >
+                <Trash2 size={16} />
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

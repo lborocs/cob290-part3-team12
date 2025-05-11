@@ -6,7 +6,6 @@ const CreateGroupChatPopup = ({ isOpen, onClose, onGroupChatCreated }) => {
   const [formData, setFormData] = useState({
     groupchat_name: "",
     description: "",
-    admin_only_add: false,
     icon_url: "",
   });
 
@@ -31,7 +30,6 @@ const CreateGroupChatPopup = ({ isOpen, onClose, onGroupChatCreated }) => {
         setFormData({
           groupchat_name: "",
           description: "",
-          admin_only_add: false,
           icon_url: "",
         });
       } else {
@@ -43,10 +41,10 @@ const CreateGroupChatPopup = ({ isOpen, onClose, onGroupChatCreated }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
@@ -86,18 +84,6 @@ const CreateGroupChatPopup = ({ isOpen, onClose, onGroupChatCreated }) => {
               value={formData.icon_url}
               onChange={handleChange}
             />
-          </div>
-          <div className="form-group checkbox-group">
-            <label htmlFor="admin_only_add">
-              <input
-                type="checkbox"
-                id="admin_only_add"
-                name="admin_only_add"
-                checked={formData.admin_only_add}
-                onChange={handleChange}
-              />
-              Admin Only Add
-            </label>
           </div>
           <div className="button-group">
             <button type="submit" className="submit-button">

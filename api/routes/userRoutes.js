@@ -1,6 +1,7 @@
 // all user related routes
 /*
  * get all users with their membership status for a specific group chat
+ * get single user details
  */
 
 const express = require("express");
@@ -39,6 +40,34 @@ router.get("/get-users/:groupchat_id", authenticateToken, (req, res) => {
       return res.status(500).json({ error: error.message });
     }
     res.json({ users: results });
+  });
+});
+
+/*  get single user details
+input:
+- token
+- email
+
+output:
+- user details (first_name, last_name, email)
+*/
+router.get("/get-user/:email", authenticateToken, (req, res) => {
+  const email = req.params.email;
+
+  const userQuery = `
+    SELECT first_name, last_name, email
+    FROM User
+    WHERE email = ?;
+  `;
+
+  connection.query(userQuery, [email], (error, results) => {
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json(results[0]);
   });
 });
 

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { ArrowUp } from 'lucide-react'; 
+import React, { useState } from "react";
+import { ArrowUp } from "lucide-react";
 import API_URL from "../config";
 
-const InputField = ({ onMessageSent }) => {
-  const [message, setMessage] = useState('');
+const InputField = ({ onMessageSent, groupchatId }) => {
+  const [message, setMessage] = useState("");
 
   const handleMessageSend = () => {
     const token = localStorage.getItem("token");
@@ -18,13 +18,13 @@ const InputField = ({ onMessageSent }) => {
         Authorization: token,
       },
       body: JSON.stringify({
-        groupchat_id: 1,
+        groupchat_id: groupchatId,
         message_contents: message,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        setMessage('');
+        setMessage("");
         if (onMessageSent) onMessageSent(); // Optionally trigger refresh
       })
       .catch((err) => console.error("Message send error:", err));
@@ -40,7 +40,7 @@ const InputField = ({ onMessageSent }) => {
           style={styles.input}
           placeholder="Type a message"
           onKeyDown={(e) => {
-            if (e.key === 'Enter') handleMessageSend();
+            if (e.key === "Enter") handleMessageSend();
           }}
         />
         <button style={styles.button} onClick={handleMessageSend}>
@@ -53,43 +53,43 @@ const InputField = ({ onMessageSent }) => {
 
 const styles = {
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    width: '100%',
-    marginTop: '10px',
-    position: 'sticky',
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    marginTop: "10px",
+    position: "sticky",
     zIndex: 1,
-    marginBottom: '20px',
+    marginBottom: "20px",
   },
   inputField: {
-    display: 'flex',
-    alignItems: 'center',
-    border: '2px solid #000',
-    borderRadius: '25px',
-    padding: '6px',
-    width: '80%',
-    maxWidth: '600px',
-    backgroundColor: 'white',
+    display: "flex",
+    alignItems: "center",
+    border: "2px solid #000",
+    borderRadius: "25px",
+    padding: "6px",
+    width: "80%",
+    maxWidth: "600px",
+    backgroundColor: "white",
   },
   input: {
     flex: 1,
-    border: 'none',
-    outline: 'none',
-    padding: '8px',
-    fontSize: '16px',
-    borderRadius: '20px',
+    border: "none",
+    outline: "none",
+    padding: "8px",
+    fontSize: "16px",
+    borderRadius: "20px",
   },
   button: {
-    width: '32px',
-    height: '32px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#007BFF',
-    border: 'none',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    marginLeft: '8px',
+    width: "32px",
+    height: "32px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#007BFF",
+    border: "none",
+    borderRadius: "50%",
+    cursor: "pointer",
+    marginLeft: "8px",
   },
 };
 

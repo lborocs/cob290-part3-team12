@@ -6,7 +6,7 @@ import chatsData from "./../Mock JSON/chats.json";
 import "./CSS/chatsColumn.css";
 import API_URL from "../config";
 
-const ChatsColumn = () => {
+const ChatsColumn = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(null);
   // useEffect(() => {
@@ -41,6 +41,41 @@ const ChatsColumn = () => {
   const handleClick = (id) => {
     console.log("clicked", id);
     setActiveChat(id);
+    onChatSelect(id);
+  };
+
+  const handleEdit = async (chatId) => {
+    // TODO: Implement edit functionality
+    console.log("Edit chat:", chatId);
+  };
+
+  const handleDelete = async (chatId) => {
+    const jwt = localStorage.getItem("token");
+    try {
+      const response = await fetch(
+        `${API_URL}/api/delete-groupchat/${chatId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: jwt,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.ok) {
+        // Remove the deleted chat from the list
+        setChats(chats.filter((chat) => chat.groupchat_id !== chatId));
+        if (activeChat === chatId) {
+          setActiveChat(null);
+          onChatSelect(null);
+        }
+      } else {
+        console.error("Failed to delete group chat");
+      }
+    } catch (error) {
+      console.error("Error deleting group chat:", error);
+    }
   };
 
   return (
@@ -48,6 +83,7 @@ const ChatsColumn = () => {
       {chats &&
         chats.map((chat) => (
           <ChatWidget
+            key={chat.groupchat_id}
             widgetID={chat.groupchat_id}
             iconFilePath={chat.icon_url}
             chatHeading={chat.name}
@@ -56,6 +92,9 @@ const ChatsColumn = () => {
             notioficationCount={chat.unread_messages_count}
             isActive={activeChat === chat.groupchat_id}
             handleClick={() => handleClick(chat.groupchat_id)}
+            permissions={chat.permission}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
           />
         ))}
     </div>

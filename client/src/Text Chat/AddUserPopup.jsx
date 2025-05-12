@@ -174,6 +174,11 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
     return user.is_member === 1;
   };
 
+  const canLeave = (user) => {
+    //can leave a gc
+    return user.email === currentUserEmail;
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -246,6 +251,15 @@ const AddUserPopup = ({ isOpen, onClose, groupchatId }) => {
                           title="Remove from Group"
                         >
                           Remove
+                        </button>
+                      )}
+                      {canLeave(user) && (
+                        <button
+                          className="action-button remove"
+                          onClick={() => handleRemoveUser(user.email)}
+                          title="Leave Group"
+                        >
+                          Leave Group
                         </button>
                       )}
                     </>

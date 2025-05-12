@@ -1,7 +1,8 @@
-import React from "react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
 } from "recharts";
+import API_URL from "../config";
+import React, { useState, useEffect } from "react";
 
 const data = [
   { name: "Task 1", number: 30 },
@@ -12,7 +13,51 @@ const data = [
   { name: "Task 6", number: 20 },
 ];
 
-const TaskDistributionChart = () => {
+const TaskDistributionChart = (
+  teamId
+) => {
+
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchTaskData = async () => {
+      if (!teamId) return;
+
+      const jwt = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `${API_URL}/api/get-team-tasks/${teamId}`,
+          {
+            headers: {
+              Authorization: jwt,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          // Process the tasks data for the pie chart
+          const taskTypes = {};
+          result.results.forEach((task) => {
+            if (!taskTypes[task.description]) {
+              taskTypes[task.description] = 0;
+            }
+            taskTypes[task.description] += task.manhours;
+          });
+
+          const chartData = Object.entries(taskTypes).map(([name, value]) => ({
+            name,
+            number: value,
+          }));
+
+          setData(chartData);
+        }
+      } catch (error) {
+        console.error("Error fetching task duration data:", error);
+      }
+    };
+    fetchTaskData();
+      }, [teamId]);
+  
     return (
         <div className="bg-white p-4 shadow-md rounded-xl text-left">
           <div className="text-left space-y-1"> 

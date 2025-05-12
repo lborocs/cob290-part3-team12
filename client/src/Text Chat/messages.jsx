@@ -32,6 +32,16 @@ const TextChat = ({ groupchatId }) => {
       });
   };
 
+  useEffect(() => {
+    if (!groupchatId) return;
+
+    fetchMessages();
+
+    const pollInterval = setInterval(fetchMessages, 3000);
+
+    return () => clearInterval(pollInterval);
+  }, [groupchatId]);
+
   const handleEditMessage = async (messageId, newContent) => {
     const jwt = localStorage.getItem("token");
     try {
@@ -82,10 +92,6 @@ const TextChat = ({ groupchatId }) => {
       console.error("Error deleting message:", error);
     }
   };
-
-  useEffect(() => {
-    fetchMessages();
-  }, [groupchatId]);
 
   return (
     <div className="text-chat-container">

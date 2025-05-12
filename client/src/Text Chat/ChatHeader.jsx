@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./CSS/ChatHeader.css"; // Assuming you'll add CSS in a separate file
 import CreateGroupChatPopup from "./CreateGroupChatPopup";
 
-const ChatHeader = () => {
+const ChatHeader = ({ onChatListUpdate }) => {
   const [activeButton, setActiveButton] = useState("All"); // State to track active button
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -14,8 +14,9 @@ const ChatHeader = () => {
   };
 
   const handleGroupChatCreated = (newGroupChat) => {
-    // You can add any additional logic here if needed
-    console.log("New group chat created:", newGroupChat);
+    if (onChatListUpdate) {
+      onChatListUpdate();
+    }
   };
 
   return (

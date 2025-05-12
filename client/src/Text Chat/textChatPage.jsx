@@ -10,7 +10,6 @@ const TextChatPage = () => {
   return (
     <div className="textChatPageWrapper">
       <div className="leftHandMenu">
-        <ChatHeader />
         <ChatsColumn onChatSelect={setActiveGroupChatId} />
       </div>
       <div className="rightHandContainer">

@@ -5,6 +5,7 @@ import "./CSS/chatsColumn.css";
 import API_URL from "../config";
 import EditGroupChatPopup from "./EditGroupChatPopup";
 import AddUserPopup from "./AddUserPopup";
+import ChatHeader from "./ChatHeader";
 
 const ChatsColumn = ({ onChatSelect }) => {
   const [chats, setChats] = useState([]);
@@ -12,10 +13,8 @@ const ChatsColumn = ({ onChatSelect }) => {
   const [editingChat, setEditingChat] = useState(null);
   const [addingUserToChat, setAddingUserToChat] = useState(null);
 
-  useEffect(() => {
+  const fetchChats = () => {
     const jwt = localStorage.getItem("token");
-
-    console.log(`Token${localStorage.getItem("token")}`);
     fetch(`${API_URL}/api/get-groupchats`, {
       method: "GET",
       headers: {
@@ -25,20 +24,28 @@ const ChatsColumn = ({ onChatSelect }) => {
     })
       .then(async (response) => {
         const text = await response.text();
-        console.log("Raw response:", text);
         return JSON.parse(text);
       })
       .then((data) => {
         setChats(data.groupchats);
-        console.log("Fetched group chats:", data);
       })
       .catch((error) => {
         console.error("Error fetching group chats:", error);
       });
+  };
+
+  useEffect(() => {
+    // Initial fetch
+    fetchChats();
+
+    // Set up polling every 3 seconds
+    const pollInterval = setInterval(fetchChats, 3000);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(pollInterval);
   }, []);
 
   const handleClick = (id) => {
-    console.log("clicked", id);
     setActiveChat(id);
     onChatSelect(id);
   };
@@ -95,6 +102,7 @@ const ChatsColumn = ({ onChatSelect }) => {
 
   return (
     <div className="chatsColumnWrapper">
+      <ChatHeader onChatListUpdate={fetchChats} />
       {chats &&
         chats.map((chat) => (
           <ChatWidget

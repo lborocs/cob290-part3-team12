@@ -4,6 +4,8 @@ import "./dashboard.css";
 import TaskDistributionChart from "./taskDistributionChart";
 import TaskDurationPieChart from "./taskDurationChart";
 import API_URL from "../config";
+import { useNavigate } from 'react-router-dom';
+
 
 const Dashboard = () => {
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -12,6 +14,9 @@ const Dashboard = () => {
   const [data, setData] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(0);
   const [pendingTasks, setPendingTasks] = useState(0);
+
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -27,6 +32,7 @@ const Dashboard = () => {
 
           if (response.ok) {
             const data = await response.json();
+            console.log(data);  
             setTeams(data);
             if (data.length > 0) {
               setSelectedTeam(data[0].team_id);
@@ -89,23 +95,23 @@ const Dashboard = () => {
       }
     };
     fetchTaskData();
-      }, [selectedTeam]);
+  }, [selectedTeam]);
 
-      useEffect(() => {
-        let completed = 0;
-        let pending = 0;
-      
-        data.forEach((task) => {
-          if (task.completed === 1) {
-            completed += 1;
-          } else {
-            pending += 1;
-          }
-        });
-      
-        setCompletedTasks(completed);
-        setPendingTasks(pending);
-      }, [data]);
+  useEffect(() => {
+    let completed = 0;
+    let pending = 0;
+
+    data.forEach((task) => {
+      if (task.completed === 1) {
+        completed += 1;
+      } else {
+        pending += 1;
+      }
+    });
+
+    setCompletedTasks(completed);
+    setPendingTasks(pending);
+  }, [data]);
 
 
   return (
@@ -115,7 +121,7 @@ const Dashboard = () => {
       {/* Analytics Section */}
       <div className="dashboard-analytics">
         <div className="dashboard-analytics-section">
-        {selectedTeam && <TaskDistributionChart chartData={data} />}
+          {selectedTeam && <TaskDistributionChart chartData={data} />}
         </div>
 
         <div className="dashboard-analytics-section">
@@ -132,9 +138,14 @@ const Dashboard = () => {
             ))}
           </select>
           <p className="dashboard-link-text">
-            <a href="#" className="dashboard-link">
+            <a onClick={() => navigate('/teamDash', {
+              state: {
+                selectedTeam,
+                selectedTeamDescription
+              }
+            })} className="dashboard-link">
               View data
-            </a>{" "}
+            </a> {""}
             metrics for selected team
           </p>
           <div className="dashboard-metrics">
@@ -156,7 +167,7 @@ const Dashboard = () => {
       <div className="dashboard-leader">
         <div className="dashboard-leader-avatar"></div>
         <div>
-          <h2 className="dashboard-leader-name">Team Leader</h2>
+          <h2 className="dashboard-leader-name">Team Leader: {selectedTeam}</h2>
           <span className="dashboard-leader-tag">
             {selectedTeamDescription}
           </span>

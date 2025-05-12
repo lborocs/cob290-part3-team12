@@ -6,17 +6,19 @@ const connection = require("../db");
 
 // UTILITY FUNCTIONS
 // Returns a boolean of whether the user is an admin
-function isUserAdmin(userId, callback) {
-  const query = `SELECT permission FROM Membership WHERE email = ?`;
-  connection.query(query, [userId], (error, results) => {
+function isUserAdmin(email, callback) {
+  const query = `SELECT admin FROM User WHERE email = ?`;
+  connection.query(query, [email], (error, results) => {
     if (error) {
       return callback(error, null);
     }
     if (results.length === 0) {
       return callback(null, false);
     }
-    if (results[0].permission === "admin") {
+    if (results[0].admin == 1) {
       return callback(null, true);
+    } else {
+      return callback(null, false);
     }
   });
 }
@@ -41,7 +43,7 @@ function getTeamLeader(teamId, callback) {
 // GET ROUTES
 
 // Get all teams and their members
-// Returns the team id, description, team leader and role of the user in that team
+// Returns the team id, description, team leader
 // Only accessible by admins
 router.get("/get-all-teams", authenticateToken, (req, res) => {
   // If user is not an admin do not allow access to this route
@@ -55,7 +57,7 @@ router.get("/get-all-teams", authenticateToken, (req, res) => {
 
     // Query to get all teams and their members
     const getAllTeamsQuery = `
-      SELECT t.team_id, t.description, t.team_leader, tm.user_id, tm.role
+      SELECT t.team_id, t.description, t.team_leader, tm.user_id
       FROM Team t
       JOIN Team_Members tm ON t.team_id = tm.team_id;
     `;
@@ -76,13 +78,13 @@ router.get("/get-all-teams", authenticateToken, (req, res) => {
 
 
 // Gets all teams that the user is a member of
-// Returns the team id, description, team leader and role of the user in that team
+// Returns the team id, description, team leader
 router.get("/get-user-teams", authenticateToken, (req, res) => {
   let email = req.user.email;
 
   // Check if the user is a member of any teams
   const checkMembershipQuery = `
-      SELECT t.team_id, t.description, t.team_leader, tm.role
+      SELECT t.team_id, t.description, t.team_leader
       FROM Team t
       JOIN Team_Members tm ON t.team_id = tm.team_id
       WHERE tm.user_id = ?;
@@ -154,11 +156,11 @@ router.post("/create-team", authenticateToken, (req, res) => {
 
       // Add the team leader as a member first
       const addLeaderQuery = `
-      INSERT INTO Team_Members (team_id, user_id, role)
-      VALUES (?, ?, ?);
+      INSERT INTO Team_Members (team_id, user_id)
+      VALUES (?, ?);
     `;
 
-      connection.query(addLeaderQuery, [teamId, teamLeaderId, 'leader'], (leaderError) => {
+      connection.query(addLeaderQuery, [teamId, teamLeaderId], (leaderError) => {
         if (leaderError) {
           return res.status(500).json({ error: leaderError.message });
         }
@@ -166,11 +168,11 @@ router.post("/create-team", authenticateToken, (req, res) => {
         // If we have additional team members to add
         if (teamMembers.length > 0) {
           // Prepare values for multiple inserts
-          const memberValues = teamMembers.map(member => [teamId, member, 'member']);
+          const memberValues = teamMembers.map(member => [teamId, member]);
 
           // Use bulk insert syntax for MySQL
           const addMembersQuery = `
-          INSERT INTO Team_Members (team_id, user_id, role)
+          INSERT INTO Team_Members (team_id, user_id)
           VALUES ?;
         `;
 
@@ -270,14 +272,14 @@ router.put("/edit-team-members", authenticateToken, (req, res) => {
         // Create rows of new team members
         const values = newMembers
           .filter(memberId => memberId !== userId) // Filter out the team leader
-          .map(memberId => [teamId, memberId, 'member']);
+          .map(memberId => [teamId, memberId]);
 
         if (values.length === 0) {
           return res.json({ message: "Team members reset" }); // Nothing to insert
         }
 
         const insertQuery = `
-          INSERT INTO Team_Members (team_id, user_id, role)
+          INSERT INTO Team_Members (team_id, user_id)
           VALUES ?
         `;
 
@@ -318,6 +320,14 @@ router.delete("/delete-team", authenticateToken, (req, res) => {
         return res.status(403).json({ error: "You are not authorised to delete this team" });
       }
 
+      // Delete the team from the Team_Members table
+      const deleteMembersQuery = `DELETE FROM Team_Members WHERE team_id = ?;`;
+
+      connection.query(deleteMembersQuery, [teamId], (memberDeleteError) => {
+        if (memberDeleteError) {
+          return res.status(500).json({ error: memberDeleteError.message });
+        }
+
       // Delete the team from the Team table
       const deleteTeamQuery = `DELETE FROM Team WHERE team_id = ?;`;
 
@@ -325,14 +335,6 @@ router.delete("/delete-team", authenticateToken, (req, res) => {
         if (deleteError) {
           return res.status(500).json({ error: deleteError.message });
         }
-
-        // Delete the team from the Team_Members table
-        const deleteMembersQuery = `DELETE FROM Team_Members WHERE team_id = ?;`;
-
-        connection.query(deleteMembersQuery, [teamId], (memberDeleteError) => {
-          if (memberDeleteError) {
-            return res.status(500).json({ error: memberDeleteError.message });
-          }
 
           res.json({ message: "Team deleted successfully" });
         });

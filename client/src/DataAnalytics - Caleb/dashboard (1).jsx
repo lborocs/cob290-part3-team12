@@ -6,7 +6,6 @@ import TasksPieChart from "./TasksPieChart";
 
 const Dashboard = () => {
   // Example team member data
-  const teamMembers}
   const teamMembers = [
     { name: "Alice Smith", hoursCompleted: 25, totalHours: 40 },
     { name: "Bob Johnson", hoursCompleted: 18, totalHours: 30 },

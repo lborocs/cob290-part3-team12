@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./CSS/ChatHeader.css"; // Assuming you'll add CSS in a separate file
 import CreateGroupChatPopup from "./CreateGroupChatPopup";
 
-const ChatHeader = ({ onChatListUpdate }) => {
+const ChatHeader = ({ onChatListUpdate, onSearch }) => {
   const [activeButton, setActiveButton] = useState("All"); // State to track active button
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
 
   // Handler for button clicks
   const handleButtonClick = (buttonName) => {
@@ -12,6 +13,11 @@ const ChatHeader = ({ onChatListUpdate }) => {
     // Add your button functionality here
     console.log(`${buttonName} button clicked`);
   };
+
+  // Update parent with search query whenever it changes
+  useEffect(() => {
+    onSearch?.(searchQuery);
+  }, [searchQuery, onSearch]);
 
   const handleGroupChatCreated = (newGroupChat) => {
     if (onChatListUpdate) {
@@ -26,6 +32,8 @@ const ChatHeader = ({ onChatListUpdate }) => {
           type="text"
           placeholder="Search chats..."
           className="search-input"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
           className="create-chat-button"

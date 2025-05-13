@@ -15,49 +15,7 @@ const data = [
 
 const TaskDistributionChart = (
   {chartData}
-) => {
-
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   const fetchTaskData = async () => {
-  //     if (!teamId) return;
-  //     const jwt = localStorage.getItem("token");
-  //     try {
-  //       const response = await fetch(
-  //         // the dodgedy teamId.teamId is a becuase teamId is an object, just a sketchy workaround
-  //         `${API_URL}api/get-team-tasks/${teamId.teamId}`,
-  //         {
-  //           headers: {
-  //             Authorization: jwt,
-  //           },
-  //         }
-  //       );
-
-  //       if (response.ok) {
-  //         const result = await response.json();
-  //         console.log(result);
-  //         const taskTypes = {};
-  //         result.results.forEach((task) => {
-  //           if (!taskTypes[task.description]) {
-  //             taskTypes[task.description] = 0;
-  //           }
-  //           taskTypes[task.description] += task.manhours;
-  //         });
-
-  //         const chartData = Object.entries(taskTypes).map(([name, value]) => ({
-  //           name,
-  //           number: value,
-  //         }));
-
-  //         setData(chartData);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching task duration data:", error);
-  //     }
-  //   };
-  //   fetchTaskData();
-  //     }, [teamId]);
-  
+) => {  
     return (
         <div className="bg-white p-4 shadow-md rounded-xl text-left">
           <div className="text-left space-y-1"> 

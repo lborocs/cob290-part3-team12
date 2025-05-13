@@ -158,11 +158,16 @@
 }
 
 .dashboard-team-member-avatar {
+    border-radius: 50%;
     width: 50px;
     height: 50px;
-    background-color: #e5e7eb;
-    border-radius: 50%;
-    flex-shrink: 0;
+    max-width: 100px;
+    max-height: 100px;
+    background: linear-gradient(to top right, #969696, #dddddd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
 }
 
 .dashboard-team-member-info {
@@ -315,3 +320,22 @@
     color: #4b5563;
     margin: 0;
 }
+
+.iconInnitials {
+    font-size: 30px;
+    color: white;
+    font-weight: 700;
+  }
+
+  .imageMask {
+    border-radius: 50%;
+    width: 70px;
+    height: 70px;
+    max-width: 100px;
+    max-height: 100px;
+    background: linear-gradient(to top right, #969696, #dddddd);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }

@@ -22,15 +22,19 @@ const ChatWidget = ({
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formattedTime = `${hours}:${minutes}`;
-  var icon = <img src={iconFilePath} alt="icon" />;
+  var icon = null;  
   var isAdmin = permissions === "standard" ? false : true;
 
-  if (iconFilePath == null) {
+  if (!iconFilePath) {
     var initials = chatHeading
       .split(" ")
       .map((n) => n[0])
-      .join("");
+      .join("")
+      .toUpperCase();
     icon = <span className="iconInnitials">{initials}</span>;
+  }
+  else {
+    icon = <img src={iconFilePath} alt="icon" />;
   }
 
   const handleEditClick = (e) => {

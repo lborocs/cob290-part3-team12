@@ -22,7 +22,7 @@ const ChatWidget = ({
   const hours = date.getHours().toString().padStart(2, "0");
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const formattedTime = `${hours}:${minutes}`;
-  var icon = null;  
+  var icon = null;
   var isAdmin = permissions === "standard" ? false : true;
 
   if (!iconFilePath) {
@@ -32,8 +32,7 @@ const ChatWidget = ({
       .join("")
       .toUpperCase();
     icon = <span className="iconInnitials">{initials}</span>;
-  }
-  else {
+  } else {
     icon = <img src={iconFilePath} alt="icon" />;
   }
 
@@ -69,7 +68,9 @@ const ChatWidget = ({
       </div>
       <div className="section notificationCol">
         <p>{formattedTime}</p>
-        <div className="notificationCount">{notioficationCount}</div>
+        {notioficationCount > 0 && (
+          <div className="notificationCount">{notioficationCount}</div>
+        )}
       </div>
       {showActions && (
         <div className="action-buttons">

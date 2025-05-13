@@ -1,16 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
+import { useLocation } from 'react-router-dom';
 import Header from './header';
-import './dashboard.css';
+import './InDepthTeamDash.css';
 import TaskDistributionChart from "./taskDistributionChart";
-import TasksPieChart from "./TasksPieChart";
+import TasksPieChart from "./taskDurationChart";
+import API_URL from '../config';
+
+
 
 const Dashboard = () => {
+  const [data, setData] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState(0);
+  const [pendingTasks, setPendingTasks] = useState(0);
+  const [iconFilePath, setIconFilePath] = useState(null);
+  
+
+
+  const location = useLocation();
+  const { selectedTeam, selectedTeamDescription } = location.state || {};
+  
   // Example team member data
   const teamMembers = [
     { name: "Alice Smith", hoursCompleted: 25, totalHours: 40 },
     { name: "Bob Johnson", hoursCompleted: 18, totalHours: 30 },
     { name: "Clara Lee", hoursCompleted: 35, totalHours: 50 }
   ];
+
+  useEffect(() => {
+    const fetchTaskData = async () => {
+      if (!selectedTeam) return;
+      const jwt = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `${API_URL}api/get-team-tasks/${selectedTeam}`,
+          {
+            headers: {
+              Authorization: jwt,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+          const taskTypes = {};
+          result.results.forEach((task) => {
+            if (!taskTypes[task.description]) {
+              taskTypes[task.description] = 0;
+            }
+            taskTypes[task.description] += task.manhours;
+          });
+
+          const chartData = Object.entries(taskTypes).map(([name, value]) => ({
+            name,
+            number: value,
+          }));
+
+          setData(chartData);
+        }
+      } catch (error) {
+        console.error("Error fetching task duration data:", error);
+      }
+    };
+    fetchTaskData();
+      }, [selectedTeam]);
+
+      useEffect(() => {
+        let completed = 0;
+        let pending = 0;
+      
+        data.forEach((task) => {
+          if (task.completed === 1) {
+            completed += 1;
+          } else {
+            pending += 1;
+          }
+        });
+      
+        setCompletedTasks(completed);
+        setPendingTasks(pending);
+      }, [data]);
+  
 
   // Example overdue tasks data
   const overdueTasks = [
@@ -26,6 +96,8 @@ const Dashboard = () => {
     setSelectedPerformance(option);
   };
 
+  
+
   return (
     <div className="dashboard-container">
       <Header />
@@ -33,7 +105,7 @@ const Dashboard = () => {
       {/* Analytics Section */}
       <div className="dashboard-analytics">
         <div className="dashboard-analytics-section">
-          <TaskDistributionChart />
+          <TaskDistributionChart chartData={data}/>
         </div>
 
         <div className="dashboard-analytics-section">
@@ -66,23 +138,39 @@ const Dashboard = () => {
           <div className="dashboard-hours-completed">
             <h3 className="dashboard-hours-title">Hours Completed</h3>
             <div className="dashboard-team-members">
-              {teamMembers.map((member, index) => (
-                <div key={index} className="dashboard-team-member">
-                  <div className="dashboard-team-member-avatar"></div>
-                  <div className="dashboard-team-member-info">
-                    <span className="dashboard-team-member-name">{member.name}</span>
-                    <div className="dashboard-progress-container">
-                      <div
-                        className="dashboard-progress-bar"
-                        style={{ width: `${(member.hoursCompleted / member.totalHours) * 100}%` }}
-                      ></div>
+              {teamMembers.map((member, index) => {
+                let icon;
+                if (!iconFilePath) {
+                  const initials = member.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase();
+                  icon = <span className="iconInnitials">{initials}</span>;
+                }
+                else {
+                  icon = <img src={iconFilePath} alt="icon" />;
+                }
+                return (
+                  <div key={index} className="dashboard-team-member">
+                    <div className="dashboard-team-member-avatar">
+                      {icon}
                     </div>
-                    <span className="dashboard-progress-text">
-                      {member.hoursCompleted}/{member.totalHours} hours
-                    </span>
+                    <div className="dashboard-team-member-info">
+                      <span className="dashboard-team-member-name">{member.name}</span>
+                      <div className="dashboard-progress-container">
+                        <div
+                          className="dashboard-progress-bar"
+                          style={{ width: `${(member.hoursCompleted / member.totalHours) * 100}%` }}
+                        ></div>
+                      </div>
+                      <span className="dashboard-progress-text">
+                        {member.hoursCompleted}/{member.totalHours} hours
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
             <div className="dashboard-performance">
               <h3 className="dashboard-performance-title">Overall Team Performance</h3>

@@ -6,7 +6,7 @@ import LoginPage from './Log In/LoginPage';
 import TextChatPage from './Text Chat/textChatPage';
 import Dashboard from './Data Analytics/dashboard';
 import TabLayout from './Navigation/tabs';
-import TeamDashboard from './Data Analytics/InDepthTeamDash';
+import TeamDashboard from './Data Analytics/InDepthTeamDash.jsx';
 
 
 

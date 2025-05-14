@@ -6,7 +6,7 @@ import TasksPieChart from "./TasksPieChart";
 
 const Dashboard = () => {
   // Example team member data
-  const teamMembers}
+
   const teamMembers = [
     { name: "Alice Smith", hoursCompleted: 25, totalHours: 40 },
     { name: "Bob Johnson", hoursCompleted: 18, totalHours: 30 },
@@ -59,7 +59,7 @@ const Dashboard = () => {
 
       {/* Team Leader Section */}
       <div className="dashboard-leader">
-        <div className="dashboard-leader-avatar"></div>
+        {/* <div className="dashboard-leader-avatar"></div> */}
         <div>
           <h2 className="dashboard-leader-name">Team A Leader</h2>
           <span className="dashboard-leader-tag">Team A</span>
@@ -110,6 +110,14 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        <div className="dashboard-pie-chart">
+            <TasksPieChart
+              data={{
+                onSchedule: 6,
+                overdue: 3
+              }}
+            />
+          </div>
       </div>
 
       {/* Tasks Section */}

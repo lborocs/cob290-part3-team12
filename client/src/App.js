@@ -7,7 +7,7 @@ import TextChatPage from './Text Chat/textChatPage';
 import Dashboard from './Data Analytics/dashboard';
 import TabLayout from './Navigation/tabs';
 // import TeamDashboard from './Data Analytics/InDepthTeamDash.jsx';
-import TeamDashboard from "./Data Analytics/DataAnalyticsCaleb/dashboard.jsx";
+import TeamDashboard from "./DataAnalyticsCaleb/dashboard.jsx";
 
 
 

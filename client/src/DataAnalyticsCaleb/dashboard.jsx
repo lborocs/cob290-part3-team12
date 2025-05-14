@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Header from './header';
+import Header from '../Data Analytics/header';
 import './dashboard.css';
-import TaskDistributionChart from "./taskDistributionChart";
+import TaskDistributionChart from "../Data Analytics/taskDistributionChart";
 import TasksPieChart from "./TasksPieChart";
 
 const Dashboard = () => {

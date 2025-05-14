@@ -6,7 +6,8 @@ import LoginPage from './Log In/LoginPage';
 import TextChatPage from './Text Chat/textChatPage';
 import Dashboard from './Data Analytics/dashboard';
 import TabLayout from './Navigation/tabs';
-import TeamDashboard from './Data Analytics/InDepthTeamDash.jsx';
+import TeamDashboard from './Team Analytics Page/dashboard.jsx';
+import CreateAccount from './Create Account/createAccount.jsx';
 
 
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/" element={<LoginPage />} />
           </Route>
           <Route path="/teamDash" element={<TeamDashboard />} />
+          <Route path ="/createAccount" element={<CreateAccount />} />
         </Routes>
       </div>
     </Router>

@@ -27,12 +27,32 @@ const AbsoluteLoginForm = ({}) => {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userEmail", email)
           navigate("/textchat");
+          setVisibility(true)
         } else {
           console.error("Login failed:", data.error);
+          setVisibility(false)
         }
       })
       .catch((err) => console.error("Login error:", err));
   };
+
+
+  const setVisibility = (bool) => {
+    if(bool){
+      const loginFailedP = document.querySelector(".LoginFailedP");
+      if (loginFailedP) {
+        loginFailedP.style.display = "none";
+      }
+    }
+    else{
+    const loginFailedP = document.querySelector(".LoginFailedP");
+    if (loginFailedP) {
+      loginFailedP.style.display = "block";
+    }
+  }
+  }
+
+
 
   return (
     <div className="logInDivWrapper">
@@ -51,7 +71,9 @@ const AbsoluteLoginForm = ({}) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <p className="LoginFailedP">Login Failed,incorect user details, please try again</p>
         <Button text="Log In" onClick={() => handleLogin(email, password)} />
+          <button className="createAccount" onClick={()=> navigate("/createAccount")}>Dont have an account? Click Here to Create One</button>
       </div>
     </div>
   );

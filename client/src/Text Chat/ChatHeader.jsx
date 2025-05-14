@@ -42,34 +42,6 @@ const ChatHeader = ({ onChatListUpdate, onSearch }) => {
           Create Group Chat
         </button>
       </div>
-      <div className="button-group">
-        <button
-          className={`chat-button ${activeButton === "All" ? "active" : ""}`}
-          onClick={() => handleButtonClick("All")}
-        >
-          All
-        </button>
-        <button
-          className={`chat-button ${activeButton === "Unread" ? "active" : ""}`}
-          onClick={() => handleButtonClick("Unread")}
-        >
-          Unread
-        </button>
-        <button
-          className={`chat-button ${
-            activeButton === "Favourites" ? "active" : ""
-          }`}
-          onClick={() => handleButtonClick("Favourites")}
-        >
-          Favourites
-        </button>
-        <button
-          className={`chat-button ${activeButton === "Groups" ? "active" : ""}`}
-          onClick={() => handleButtonClick("Groups")}
-        >
-          Groups
-        </button>
-      </div>
       <CreateGroupChatPopup
         isOpen={isPopupOpen}
         onClose={() => setIsPopupOpen(false)}

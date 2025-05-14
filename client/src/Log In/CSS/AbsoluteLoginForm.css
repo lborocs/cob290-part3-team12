@@ -33,3 +33,20 @@ h4{
     align-items: center;
     gap: 5px;
 }
+
+.LoginFailedP{
+    color: red;
+    font-size: 14px;
+    margin: 0;
+    display: none;
+}
+
+.createAccount{
+    color: #1373E6;
+    font-size: 14px;
+    margin: 5px;
+    text-decoration: underline;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}

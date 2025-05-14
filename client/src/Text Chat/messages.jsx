@@ -181,7 +181,7 @@ const TextChat = ({ groupchatId }) => {
             </div>
           ))}
       </div>
-      <InputField onMessageSent={fetchMessages} groupchatId={groupchatId} />
+      {groupchatId &&<InputField onMessageSent={fetchMessages} groupchatId={groupchatId} />}
     </div>
   );
 };

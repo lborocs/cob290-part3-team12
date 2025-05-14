@@ -11,14 +11,38 @@ const CreateAccount = () => {
     const [confirmEmail, setConfirmEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+
+    const setVisibility = (bool) => {
+        if(bool){
+          const loginFailedP = document.querySelector(".createAccountFailed");
+          if (loginFailedP) {
+            loginFailedP.style.display = "none";
+          }
+        }
+        else{
+        const loginFailedP = document.querySelector(".createAccountFailed");
+        if (loginFailedP) {
+          loginFailedP.style.display = "block";
+        }
+    }
+}
 
     const handleCreateAccount = () => {
+        const loginFailedP = document.querySelector(".createAccountFailed");
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
+            setVisibility(false)
+            setErrorMessage("Passwords do not match.");
             return;
         }
-        // change the API URL to your backend URL
-        fetch(`${API_URL}/api/register`, {
+        else if (email !== confirmEmail) {
+            setVisibility(false)
+            setErrorMessage("Emails do not match.");
+            return;
+        }
+
+
+        fetch(`${API_URL}api/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -28,13 +52,17 @@ const CreateAccount = () => {
             .then((res) => res.json())
             .then((data) => {
                 if (data.success) {
+                    alert("Account created successfully!");
                     navigate("/textchat");
+                    setVisibility(true)
                 } else {
-                    alert("Account creation failed.");
+                    setVisibility(false)
                 }
             })
             .catch((err) => console.error("Registration error:", err));
     };
+
+    
 
     return (
         <div className="createAccountPage">
@@ -51,7 +79,7 @@ const CreateAccount = () => {
                     <InputBox
                         placeholder="Please confirm your email address..."
                         id="confirmEmailInputBox"
-                        value={email}
+                        value={confirmEmail}
                         onChange={(e) => setConfirmEmail(e.target.value)}
                     />
                     <InputBox
@@ -66,6 +94,7 @@ const CreateAccount = () => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    <p className="createAccountFailed">{errorMessage}</p>
                     <Button text="Create Account" onClick={handleCreateAccount} />
                     <button className="createAccount" onClick={()=> navigate("/")}>Already have an account? Click Here to Log In</button>
         

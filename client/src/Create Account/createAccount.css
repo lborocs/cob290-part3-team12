@@ -4,6 +4,12 @@ height: 100vh;
 display: flex;
 align-items: center;
 justify-content: center;
-background-color: #f0f0f0;
+background: linear-gradient(to bottom right, #f6c113, #fffbea);
+}
 
+.createAccountFailed{
+    color: red;
+    font-size: 14px;
+    margin: 0;
+    display: none;
 }

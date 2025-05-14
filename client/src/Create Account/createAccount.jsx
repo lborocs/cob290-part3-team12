@@ -53,10 +53,10 @@ const CreateAccount = () => {
         })
             .then((res) => res.json())
             .then((data) => {
-                if (data.success) {
+                if (data.message === "User registered successfully") {
                     alert("Account created successfully!");
-                    navigate("/textchat");
-                    setVisibility(true)
+                    navigate("/");
+                    setVisibility(true);
                 } else {
                     console.error("Registration failed:", data.error);
                     setVisibility(false)
@@ -66,6 +66,7 @@ const CreateAccount = () => {
             })
             .catch((err) => console.error("Registration error:", err));
     };
+
 
     
 

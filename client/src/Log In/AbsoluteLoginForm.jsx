@@ -71,6 +71,7 @@ const AbsoluteLoginForm = ({}) => {
         />
         <p className="LoginFailedP">Login Failed,incorect user details, please try again</p>
         <Button text="Log In" onClick={() => handleLogin(email, password)} />
+          <button className="createAccountP">Dont have an account? Click Here to Create One</button>
       </div>
     </div>
   );

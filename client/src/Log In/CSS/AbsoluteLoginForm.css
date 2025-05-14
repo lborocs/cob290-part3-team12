@@ -40,3 +40,13 @@ h4{
     margin: 0;
     display: none;
 }
+
+.createAccountP{
+    color: #1373E6;
+    font-size: 14px;
+    margin: 5px;
+    text-decoration: underline;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}

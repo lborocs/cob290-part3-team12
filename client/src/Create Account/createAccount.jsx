@@ -12,6 +12,8 @@ const CreateAccount = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [first_name, setFirstName] = useState("");
+    const [last_name, setLastName] = useState("");
 
     const setVisibility = (bool) => {
         if(bool){
@@ -47,7 +49,7 @@ const CreateAccount = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, password, first_name, last_name }),
         })
             .then((res) => res.json())
             .then((data) => {
@@ -56,7 +58,10 @@ const CreateAccount = () => {
                     navigate("/textchat");
                     setVisibility(true)
                 } else {
+                    console.error("Registration failed:", data.error);
                     setVisibility(false)
+                    setErrorMessage("Connection Failed, try again later.")
+                    setErrorMessage(data.error);
                 }
             })
             .catch((err) => console.error("Registration error:", err));
@@ -70,6 +75,18 @@ const CreateAccount = () => {
                 <h1 className="logInHeader">Create Account</h1>
                 <h4 className="logInSubHeader">Sign up below</h4>
                 <div className="logInForm">
+                <InputBox
+                        placeholder="Please enter your Last Name..."
+                        id="firstNameInputBox"
+                        value={first_name}
+                        onChange={(e) => setFirstName(e.target.value)}
+                    />
+               <InputBox
+                        placeholder="Please enter your Last Name..."
+                        id="lastNameInputBox"
+                        value={last_name}
+                        onChange={(e) => setLastName(e.target.value)}
+                    />
                     <InputBox
                         placeholder="Enter your email address..."
                         id="emailInputBox"

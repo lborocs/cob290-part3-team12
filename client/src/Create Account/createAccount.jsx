@@ -67,7 +67,7 @@ const CreateAccount = () => {
                         onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <Button text="Create Account" onClick={handleCreateAccount} />
-                    <button className="createAccountP" onClick={()=> navigate("/")}>Already have an account? Click Here to Log In</button>
+                    <button className="createAccount" onClick={()=> navigate("/")}>Already have an account? Click Here to Log In</button>
         
                 </div>
             </div>

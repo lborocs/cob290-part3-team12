@@ -44,7 +44,7 @@ const CreateAccount = () => {
         }
 
 
-        fetch(`${API_URL}api/register`, {
+        fetch(`${API_URL}/api/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

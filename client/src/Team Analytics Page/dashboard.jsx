@@ -133,7 +133,7 @@ const Dashboard = () => {
       {/* Analytics Section */}
       <div className="dashboard-analytics">
         <div className="dashboard-analytics-section">
-          <TaskDistributionChart />
+          {selectedTeam && <TaskDistributionChart chartData={data} />}
         </div>
 
         <div className="dashboard-analytics-section">
